@@ -43,7 +43,7 @@
       responseArea.innerHTML = "Processing...";
 
       try {
-        const refineRes = await fetch("https://foundrly-backend.onrender.com/api/refine-idea", {
+        const refineRes = await fetch("https://foundrly-backend-1.onrender.com/api/refine-idea", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ idea })
@@ -55,7 +55,7 @@
           responseArea.innerHTML = "<h3>Let’s clarify a few things:</h3><ul>" +
             refineData.questions.map(q => `<li>${q}</li>`).join("") + "</ul>";
         } else if (refineData.status === "ready") {
-          const genRes = await fetch("https://foundrly-backend.onrender.com/api/generate-code", {
+          const genRes = await fetch("https://foundrly-backend-1.onrender.com/api/generate-code", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
