@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Foundrly – AI Builder</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      padding: 2rem;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 1rem;
+      padding: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    pre {
+      background: #1a1a1a;
+      color: #f1f1f1;
+      padding: 1rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Foundrly</h1>
+  <p>Describe your AI business idea:</p>
+  <textarea id="ideaInput" placeholder="e.g. An AI that writes Instagram captions for barbers..."></textarea><br>
+  <button onclick="submitIdea()">Build It</button>
+  <div id="responseArea" style="margin-top: 2rem;"></div>
+
+  <script>
+    async function submitIdea() {
+      const idea = document.getElementById("ideaInput").value;
+      const responseArea = document.getElementById("responseArea");
+      responseArea.innerHTML = "Processing...";
+
+      try {
+        const refineRes = await fetch("https://foundrly-backend.onrender.com/api/refine-idea", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idea })
+        });
+
+        const refineData = await refineRes.json();
+
+        if (refineData.status === "clarify") {
+          responseArea.innerHTML = "<h3>Let’s clarify a few things:</h3><ul>" +
+            refineData.questions.map(q => `<li>${q}</li>`).join("") + "</ul>";
+        } else if (refineData.status === "ready") {
+          const genRes = await fetch("https://foundrly-backend.onrender.com/api/generate-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              idea,
+              target_user: "creators",
+              platform: "web app",
+              features: ["text generation", "download"]
+            })
+          });
+
+          const genData = await genRes.json();
+          responseArea.innerHTML = `
+            <h3>Tool Summary:</h3><pre>${genData.spec}</pre>
+            <h3>Generated Code:</h3><pre>${genData.code}</pre>
+            <h3>Setup Instructions:</h3><pre>${genData.instructions}</pre>
+          `;
+        } else {
+          responseArea.innerHTML = "Unexpected response.";
+        }
+      } catch (err) {
+        console.error(err);
+        responseArea.innerHTML = "Something went wrong.";
+      }
+    }
+  </script>
+</body>
+</html>
