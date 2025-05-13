@@ -10,56 +10,15 @@
     :root {
       --bg-purple: linear-gradient(to bottom right, #2d0059, #5e1aa2);
       --bg-gold:   linear-gradient(to bottom right, #5f4200, #d4af37);
-      --text-ice:  linear-gradient(145deg, #e0f2ff, #ffffff);
-      --text-black:linear-gradient(145deg, #222222, #444444);
-      --text-ice-solid: #d3e4f1;
-      --text-black-solid:#222222;
+      --text-ice:  #d3e4f1;
+      --text-black:#222222;
       --accent-p:  #9b59b6;
       --accent-g:  #f1c40f;
       --metal-p:   linear-gradient(145deg,#5e1aa2,#9b59b6);
       --metal-g:   linear-gradient(145deg,#f1c40f,#d4af37);
     }
-    body.theme-purple { 
-      background: var(--bg-purple); 
-      color: var(--text-ice-solid);
-    }
-    body.theme-purple * {
-      background: var(--text-ice);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-fill-color: transparent;
-      text-shadow: 0 0 2px rgba(255,255,255,0.1);
-    }
-    body.theme-gold { 
-      background: var(--bg-gold);
-      color: var(--text-black-solid);
-    }
-    body.theme-gold * {
-      background: var(--text-black);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-fill-color: transparent;
-      text-shadow: 0 0 2px rgba(0,0,0,0.2);
-    }
-
-    /* Exclude elements that shouldn't have gradient text */
-    body.theme-purple button,
-    body.theme-gold button,
-    body.theme-purple textarea,
-    body.theme-gold textarea,
-    body.theme-purple input,
-    body.theme-gold input,
-    body.theme-purple pre,
-    body.theme-gold pre {
-      background: none !important;
-      -webkit-text-fill-color: initial !important;
-      text-fill-color: initial !important;
-      color: inherit !important;
-      text-shadow: none !important;
-    }
-
+    body.theme-purple { background: var(--bg-purple); color: var(--text-ice); }
+    body.theme-gold   { background: var(--bg-gold);   color: var(--text-black); }
     body {
       font-family: 'Exo 2', sans-serif;
       margin:0; padding:4rem;
@@ -150,32 +109,9 @@
       border-radius:12px; padding:2.5rem;
       box-shadow:0 0 16px rgba(0,0,0,.4);
       z-index:1; margin-bottom:4rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .container:after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      right: -50%;
-      bottom: -50%;
-      background: linear-gradient(
-        to bottom right,
-        rgba(255,255,255,0.05) 0%,
-        rgba(255,255,255,0.15) 50%,
-        rgba(255,255,255,0.05) 100%
-      );
-      transform: rotate(30deg);
-      z-index: -1;
-      opacity: 0.5;
     }
 
-    #promptText { 
-      font-size:1.2rem; 
-      margin-bottom:1rem;
-      font-weight: 600;
-    }
+    #promptText { font-size:1.2rem; margin-bottom:1rem; }
     textarea, .clarify-container input {
       width:100%; padding:1.25rem;
       font-size:1.1rem; border-radius:8px;
@@ -185,21 +121,10 @@
       color:inherit; margin-bottom:1.5rem;
       resize:none; box-sizing:border-box;
       font-family:'Exo 2',sans-serif;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    textarea:focus, .clarify-container input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(155, 89, 182, 0.5);
     }
     body.theme-gold textarea,
     body.theme-gold .clarify-container input {
       background-image:var(--metal-g);
-    }
-    body.theme-gold textarea:focus,
-    body.theme-gold .clarify-container input:focus {
-      box-shadow: 0 0 0 2px rgba(241, 196, 15, 0.5);
     }
 
     button {
@@ -208,41 +133,11 @@
       border:none; border-radius:8px;
       box-shadow:0 0 12px rgba(0,0,0,.3);
       cursor:pointer; transition:transform .2s;
-      position: relative;
-      overflow: hidden;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    button:hover { 
-      transform:scale(1.05);
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    }
-    button:after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      right: -50%;
-      bottom: -50%;
-      background: linear-gradient(
-        to bottom right,
-        rgba(255,255,255,0.1) 0%,
-        rgba(255,255,255,0.3) 50%,
-        rgba(255,255,255,0.1) 100%
-      );
-      transform: rotate(30deg);
-      z-index: 1;
-      pointer-events: none;
-      animation: shimmer 3s infinite linear;
     }
     body.theme-gold button {
-      background-image:var(--metal-g); color:var(--text-black-solid);
+      background-image:var(--metal-g); color:var(--text-black);
     }
-
-    @keyframes shimmer {
-      0% { transform: rotate(30deg) translateX(-100%); }
-      100% { transform: rotate(30deg) translateX(100%); }
-    }
+    button:hover { transform:scale(1.05); }
 
     #loader {
       display:none; margin:1.5rem 0; font-size:1.3rem; text-align:center;
@@ -252,146 +147,252 @@
       padding:1rem; border-radius:8px;
       white-space:pre-wrap; font-size:1.1rem;
       color:inherit;
-      position: relative;
-      overflow: hidden;
     }
-    #responseArea pre:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        to bottom right,
-        rgba(255,255,255,0.05) 0%,
-        rgba(255,255,255,0.15) 50%,
-        rgba(255,255,255,0.05) 100%
-      );
-      z-index: -1;
-      opacity: 0.5;
+    body.theme-gold #responseArea pre {
+      background:rgba(241,196,15,.2);
+    }
+
+    /* Techy settings panel */
+    #settingsBtn {
+      position:fixed; bottom:80px; right:16px;
+      background:rgba(0,0,0,.7); color:#fff;
+      padding:.6rem; border-radius:50%;
+      font-size:1.6rem; cursor:pointer; z-index:2;
+      transition:background .3s;
+    }
+    #settingsBtn:hover { background:rgba(0,0,0,.9); }
+
+    #settingsPanel {
+      position:fixed; bottom:140px; right:16px;
+      width:220px; padding:1rem;
+      background:rgba(20,20,20,.85);
+      border:2px solid transparent;
+      border-image:var(--metal-p) 1;
+      border-radius:12px;
+      box-shadow:0 0 12px rgba(0,0,0,.6);
+      display:none; z-index:2;
+      font-size:.95rem; color:inherit;
+    }
+    #settingsPanel h4 {
+      margin:0 0 .8rem; font-size:1.1rem;
+      text-align:center; font-weight:600;
+    }
+    .setting {
+      display:flex; justify-content:space-between;
+      align-items:center; margin-bottom:.8rem;
+    }
+    .toggle {
+      position:relative; width:50px; height:24px;
+    }
+    .toggle input {
+      opacity:0; width:0; height:0;
+    }
+    .slider {
+      position:absolute; cursor:pointer;
+      top:0; left:0; right:0; bottom:0;
+      background:#555; border-radius:24px;
+      transition:.3s;
+    }
+    .slider:before {
+      content:""; position:absolute;
+      height:18px; width:18px;
+      left:3px; bottom:3px;
+      background:#fff; border-radius:50%;
+      transition:.3s;
+    }
+    input:checked + .slider {
+      background:var(--accent-p);
+    }
+    input:checked + .slider:before {
+      transform:translateX(26px);
     }
   </style>
 </head>
-<body>
+<body class="theme-purple">
 
-  <!-- Your HTML structure goes here, the buttons, onboarding popups, etc. -->
-
-<script>
-  // Your JavaScript code, including event listeners and functions
-  window.onload = () => {
-    if(localStorage.getItem('theme')==='gold') toggleTheme();
-    if(localStorage.getItem('bgAnim')==='none') toggleBackgroundAnimation();
-    if(localStorage.getItem('heroAnim')==='off') toggleHeroAnimation();
-    if(localStorage.getItem('parallax')==='off') toggleParallax();
-    
-    setTimeout(() => document.getElementById('onboard')?.remove(), 6000);
-  };
-
-  document.querySelector("#onboard button").addEventListener("click", () => {
-    document.getElementById('onboard').remove(); 
-  });
-
-  function toggleTheme() {
-    document.body.classList.toggle('theme-purple');
-    document.body.classList.toggle('theme-gold');
-    localStorage.setItem('theme', document.body.classList.contains('theme-purple') ? 'purple' : 'gold');
-  }
-</script>
-</body>
-</html>
-<script>
-  function toggleBackgroundAnimation() {
-    document.body.classList.toggle('no-hero-anim');
-    localStorage.setItem('bgAnim', document.body.classList.contains('no-hero-anim') ? 'none' : 'default');
-  }
-
-  function toggleHeroAnimation() {
-    document.body.classList.toggle('no-hero-anim');
-    localStorage.setItem('heroAnim', document.body.classList.contains('no-hero-anim') ? 'off' : 'on');
-  }
-
-  function toggleParallax() {
-    document.body.classList.toggle('no-parallax');
-    localStorage.setItem('parallax', document.body.classList.contains('no-parallax') ? 'off' : 'on');
-  }
-
-  document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('bgAnimToggle')?.addEventListener('click', toggleBackgroundAnimation);
-  document.getElementById('heroAnimToggle')?.addEventListener('click', toggleHeroAnimation);
-  document.getElementById('parallaxToggle')?.addEventListener('click', toggleParallax);
-
-  // Handling chat response and clarification logic
-  const loader = document.getElementById('loader');
-  const responseArea = document.getElementById('responseArea');
-  const clarifyInput = document.getElementById('clarifyInput');
-
-  async function getChatResponse() {
-    loader.style.display = 'block';
-    const userInput = document.getElementById('userInput').value;
-    try {
-      // Mock API call, replace with actual endpoint
-      const response = await fetch('YOUR_API_ENDPOINT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ input: userInput })
-      });
-      const data = await response.json();
-      displayResponse(data.response);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      loader.style.display = 'none';
-    }
-  }
-
-  function displayResponse(responseText) {
-    responseArea.innerHTML = `<pre>${responseText}</pre>`;
-  }
-
-  document.getElementById('submitBtn').addEventListener('click', getChatResponse);
-
-  // Clarify function to handle user input for clarification
-  document.getElementById('clarifyBtn')?.addEventListener('click', () => {
-    const clarifyText = clarifyInput.value;
-    if (clarifyText.trim()) {
-      // Mock clarification response, you can integrate this with your own logic
-      alert(`Clarified: ${clarifyText}`);
-    }
-  });
-</script>
-
-<!-- Additional elements for UI, like the buttons, form fields, etc. -->
-<div class="container">
-  <h1 class="title">Foundrly</h1>
-  <p class="slogan">Your AI Startup, Powered by Innovation.</p>
-
-  <div id="promptText">Tell us your startup idea:</div>
-  <textarea id="userInput" placeholder="Type your idea here..."></textarea>
-
-  <div id="loader" style="display:none;">Loading...</div>
-
-  <button id="submitBtn">Submit</button>
-
-  <div id="responseArea"></div>
-
-  <div class="clarify-container">
-    <input type="text" id="clarifyInput" placeholder="Clarify or ask something more...">
-    <button id="clarifyBtn">Clarify</button>
+  <div id="onboard">
+    Welcome to Foundrly!<br>
+    1️⃣ Describe your AI idea.<br>
+    2️⃣ Click “Build It.”<br>
+    3️⃣ Tweak settings ⚙️ as you like.<br>
+    <button onclick="this.parentNode.remove()">Got it!</button>
   </div>
-</div>
 
-<!-- Background chat bubbles -->
-<div class="typewriter-wrapper">
-  <div class="typewriter-chat">Hello! How can we assist you today?</div>
-</div>
+  <div class="typewriter-wrapper" id="typewriterWrapper"></div>
+  <div class="title">Foundrly</div>
+  <div class="slogan">Your Cofounder Doesn’t Have to Be Human.</div>
 
-<!-- Onboarding popup -->
-<div id="onboard">
-  <p>Welcome to Foundrly! Get started by telling us your startup idea.</p>
-  <button>Got it!</button>
-</div>
+  <div class="container">
+    <div id="promptText">Describe your AI business idea:</div>
+    <textarea id="ideaInput" placeholder="e.g. An AI that writes Instagram captions for barbers..."></textarea>
+    <div class="clarify-container" id="clarifySection" style="display:none;"></div>
+    <button id="actionBtn" onclick="submitIdea()">Build It</button>
+    <div id="loader">⏳ Generating...</div>
+    <div id="responseArea"></div>
+  </div>
+
+  <button id="settingsBtn" onclick="toggleSettings()">⚙️</button>
+  <div id="settingsPanel">
+    <h4>Settings</h4>
+    <div class="setting">
+      <span>Theme</span>
+      <label class="toggle"><input type="checkbox" id="themeToggle" onclick="toggleTheme()"><span class="slider"></span></label>
+    </div>
+    <div class="setting">
+      <span>Bg Animations</span>
+      <label class="toggle"><input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()"><span class="slider"></span></label>
+    </div>
+    <div class="setting">
+      <span>Hero Animations</span>
+      <label class="toggle"><input type="checkbox" id="heroAnimToggle" onclick="toggleHeroAnimation()"><span class="slider"></span></label>
+    </div>
+    <div class="setting">
+      <span>Parallax</span>
+      <label class="toggle"><input type="checkbox" id="parallaxToggle" onclick="toggleParallax()"><span class="slider"></span></label>
+    </div>
+  </div>
+  <script>
+    const phrases = [
+      "An AI that writes ad copy for local cafes.",
+      "A tool that builds landing pages from voice notes.",
+      "An assistant that summarizes client feedback.",
+      "An AI that auto-generates slogans for fashion brands.",
+      "A bot that responds to DMs for digital creators.",
+      "An AI that repackages blog posts into carousels.",
+      "A caption creator for streetwear drops.",
+      "Turn review comments into testimonials."
+    ];
+    let typingSpeed = 'normal', refineQuestions = [], originalIdea = '';
+    const API_TIMEOUT = 10000;
+
+    function spawnBubbles() {
+      const count = 4 + Math.floor(Math.random()*2);
+      for (let i=0; i<count; i++) spawnChatBubble();
+    }
+    function spawnChatBubble() {
+      const text = phrases[Math.floor(Math.random()*phrases.length)];
+      const bubble = document.createElement('div');
+      bubble.className = 'typewriter-chat';
+      const side = Math.random()<0.5 ? 'left' : 'right';
+      bubble.style[side] = (side==='left' ? 10+Math.random()*10 : 80+Math.random()*10) + '%';
+      bubble.style.top   = (10+Math.random()*80) + '%';
+      document.getElementById('typewriterWrapper').appendChild(bubble);
+      let i=0;
+      const iv = setInterval(()=>{
+        if(i<text.length) bubble.textContent += text[i++];
+        else { clearInterval(iv); bubble.textContent+='.'; setTimeout(()=>bubble.remove(),1000); }
+      },40);
+    }
+    setInterval(spawnBubbles,3000);
+
+    function toggleSettings(){
+      const p = document.getElementById('settingsPanel');
+      p.style.display = p.style.display==='block' ? 'none' : 'block';
+    }
+    function toggleTheme(){
+      document.body.classList.toggle('theme-purple');
+      document.body.classList.toggle('theme-gold');
+      localStorage.setItem('theme',
+        document.body.classList.contains('theme-purple')?'purple':'gold');
+    }
+    function toggleBackgroundAnimation(){
+      const w = document.getElementById('typewriterWrapper');
+      w.style.display = w.style.display==='none' ? 'block' : 'none';
+      localStorage.setItem('bgAnim', w.style.display);
+    }
+    function toggleHeroAnimation(){
+      document.body.classList.toggle('no-hero-anim');
+      localStorage.setItem('heroAnim',
+        document.body.classList.contains('no-hero-anim')?'off':'on');
+    }
+    function toggleParallax(){
+      document.body.classList.toggle('no-parallax');
+      localStorage.setItem('parallax',
+        document.body.classList.contains('no-parallax')?'off':'on');
+    }
+
+    window.onload = () => {
+      if(localStorage.getItem('theme')==='gold') toggleTheme();
+      if(localStorage.getItem('bgAnim')==='none') toggleBackgroundAnimation();
+      if(localStorage.getItem('heroAnim')==='off') toggleHeroAnimation();
+      if(localStorage.getItem('parallax')==='off') toggleParallax();
+      setTimeout(() => document.getElementById('onboard')?.remove(), 6000);
+    };
+
+    function withTimeout(p, t){
+      const tm = new Promise((_, r)=> setTimeout(()=>r(new Error('Timeout')), t));
+      return Promise.race([p, tm]);
+    }
+
+    async function submitIdea(){
+      originalIdea = document.getElementById('ideaInput').value.trim();
+      if (!originalIdea) return;
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('responseArea').innerHTML = '';
+      document.getElementById('clarifySection').style.display = 'none';
+      document.getElementById('actionBtn').style.display = 'none';
+      try {
+        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/refine-idea',{
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ idea: originalIdea })
+        }), API_TIMEOUT);
+        const data = await res.json();
+        document.getElementById('loader').style.display = 'none';
+        if (data.status === 'clarify') {
+          refineQuestions = data.questions;
+          const sec = document.getElementById('clarifySection');
+          sec.innerHTML = '<h3>Let’s clarify:</h3>';
+          refineQuestions.forEach((q,i) => {
+            const inp = document.createElement('input');
+            inp.placeholder = q; inp.id = `ans_${i}`;
+            sec.appendChild(inp);
+          });
+          const btn = document.createElement('button');
+          btn.textContent = 'Submit Answers'; btn.onclick = submitAnswers;
+          sec.appendChild(btn); sec.style.display = 'block';
+        } else if (data.status === 'ready') {
+          generateCode(originalIdea);
+        } else {
+          document.getElementById('responseArea').textContent = 'Unexpected response.';
+        }
+      } catch (e) {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('responseArea').textContent = '⚠️ Request timed out. Please try again shortly.';
+      }
+    }
+
+    async function submitAnswers(){
+      const answers = refineQuestions.map((_,i) => document.getElementById(`ans_${i}`).value.trim());
+      const refined = originalIdea + '. ' + answers.join(' ');
+      document.getElementById('clarifySection').style.display = 'none';
+      generateCode(refined);
+    }
+
+    async function generateCode(idea){
+      document.getElementById('loader').style.display = 'block';
+      try {
+        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/generate-code',{
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            idea,
+            target_user: 'creators',
+            platform: 'web app',
+            features: ['text generation','download']
+          })
+        }), API_TIMEOUT);
+        const data = await res.json();
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('responseArea').innerHTML = `
+          <h3>Tool Summary:</h3><pre>${data.spec}</pre>
+          <h3>Generated Code:</h3><pre>${data.code}</pre>
+          <h3>Setup Instructions:</h3><pre>${data.instructions}</pre>`;
+        document.getElementById('actionBtn').style.display = 'block';
+        document.getElementById('promptText').textContent = 'Describe your AI business idea:';
+      } catch (e) {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('responseArea').textContent = '⚠️ Generation timeout. Please try again.';
+      }
+    }
+  </script>
 </body>
 </html>
