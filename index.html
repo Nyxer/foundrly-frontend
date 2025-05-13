@@ -42,10 +42,9 @@
       font-size:.9rem; background:var(--accent-p);
       border:none; border-radius:4px; cursor:pointer;
     }
-
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-    /* Floating background particles */
+    /* Background chat bubbles */
     .typewriter-wrapper {
       position:fixed; top:0; left:0;
       width:100vw; height:100vh;
@@ -111,6 +110,7 @@
       box-shadow:0 0 16px rgba(0,0,0,.4);
       z-index:1; margin-bottom:4rem;
     }
+
     #promptText { font-size:1.2rem; margin-bottom:1rem; }
     textarea, .clarify-container input {
       width:100%; padding:1.25rem;
@@ -120,10 +120,13 @@
       background-blend-mode:overlay; background-color:rgba(0,0,0,.1);
       color:inherit; margin-bottom:1.5rem;
       resize:none; box-sizing:border-box;
+      font-family:'Exo 2',sans-serif;
     }
-    body.theme-gold textarea, body.theme-gold .clarify-container input {
+    body.theme-gold textarea,
+    body.theme-gold .clarify-container input {
       background-image:var(--metal-g);
     }
+
     button {
       padding:1rem 2rem; font-size:1.2rem;
       background-image:var(--metal-p); color:#fff;
@@ -248,7 +251,6 @@
       <label class="toggle"><input type="checkbox" id="parallaxToggle" onclick="toggleParallax()"><span class="slider"></span></label>
     </div>
   </div>
-
   <script>
     const phrases = [
       "An AI that writes ad copy for local cafes.",
@@ -265,19 +267,19 @@
 
     function spawnBubbles() {
       const count = 4 + Math.floor(Math.random()*2);
-      for(let i=0;i<count;i++) spawnChatBubble();
+      for (let i=0; i<count; i++) spawnChatBubble();
     }
     function spawnChatBubble() {
       const text = phrases[Math.floor(Math.random()*phrases.length)];
       const bubble = document.createElement('div');
       bubble.className = 'typewriter-chat';
-      const side = Math.random()<0.5?'left':'right';
-      bubble.style[side] = (side==='left'?10+Math.random()*10:80+Math.random()*10) + '%';
+      const side = Math.random()<0.5 ? 'left' : 'right';
+      bubble.style[side] = (side==='left' ? 10+Math.random()*10 : 80+Math.random()*10) + '%';
       bubble.style.top   = (10+Math.random()*80) + '%';
       document.getElementById('typewriterWrapper').appendChild(bubble);
       let i=0;
       const iv = setInterval(()=>{
-        if(i<text.length) bubble.textContent+=text[i++];
+        if(i<text.length) bubble.textContent += text[i++];
         else { clearInterval(iv); bubble.textContent+='.'; setTimeout(()=>bubble.remove(),1000); }
       },40);
     }
@@ -285,105 +287,110 @@
 
     function toggleSettings(){
       const p = document.getElementById('settingsPanel');
-      p.style.display = p.style.display==='block'?'none':'block';
+      p.style.display = p.style.display==='block' ? 'none' : 'block';
     }
     function toggleTheme(){
       document.body.classList.toggle('theme-purple');
       document.body.classList.toggle('theme-gold');
-      localStorage.setItem('theme', document.body.classList.contains('theme-purple')?'purple':'gold');
+      localStorage.setItem('theme',
+        document.body.classList.contains('theme-purple')?'purple':'gold');
     }
     function toggleBackgroundAnimation(){
       const w = document.getElementById('typewriterWrapper');
-      w.style.display = w.style.display==='none'?'block':'none';
+      w.style.display = w.style.display==='none' ? 'block' : 'none';
       localStorage.setItem('bgAnim', w.style.display);
     }
     function toggleHeroAnimation(){
       document.body.classList.toggle('no-hero-anim');
-      localStorage.setItem('heroAnim', document.body.classList.contains('no-hero-anim')?'off':'on');
+      localStorage.setItem('heroAnim',
+        document.body.classList.contains('no-hero-anim')?'off':'on');
     }
     function toggleParallax(){
       document.body.classList.toggle('no-parallax');
-      localStorage.setItem('parallax', document.body.classList.contains('no-parallax')?'off':'on');
+      localStorage.setItem('parallax',
+        document.body.classList.contains('no-parallax')?'off':'on');
     }
 
-    window.onload = ()=>{
+    window.onload = () => {
       if(localStorage.getItem('theme')==='gold') toggleTheme();
       if(localStorage.getItem('bgAnim')==='none') toggleBackgroundAnimation();
       if(localStorage.getItem('heroAnim')==='off') toggleHeroAnimation();
       if(localStorage.getItem('parallax')==='off') toggleParallax();
-      setTimeout(()=>document.getElementById('onboard')?.remove(),6000);
+      setTimeout(() => document.getElementById('onboard')?.remove(), 6000);
     };
 
-    function withTimeout(p,t){
-      const tm = new Promise((_,r)=>setTimeout(()=>r(new Error('Timeout')),t));
-      return Promise.race([p,tm]);
+    function withTimeout(p, t){
+      const tm = new Promise((_, r)=> setTimeout(()=>r(new Error('Timeout')), t));
+      return Promise.race([p, tm]);
     }
 
     async function submitIdea(){
       originalIdea = document.getElementById('ideaInput').value.trim();
-      if(!originalIdea) return;
-      document.getElementById('loader').style.display='block';
-      document.getElementById('responseArea').innerHTML='';
-      document.getElementById('clarifySection').style.display='none';
-      document.getElementById('actionBtn').style.display='none';
+      if (!originalIdea) return;
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('responseArea').innerHTML = '';
+      document.getElementById('clarifySection').style.display = 'none';
+      document.getElementById('actionBtn').style.display = 'none';
       try {
         const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/refine-idea',{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({idea:originalIdea})
-        }),API_TIMEOUT);
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ idea: originalIdea })
+        }), API_TIMEOUT);
         const data = await res.json();
-        document.getElementById('loader').style.display='none';
-        if(data.status==='clarify'){
-          refineQuestions=data.questions;
-          const sec=document.getElementById('clarifySection');
-          sec.innerHTML='<h3>Let’s clarify:</h3>';
-          refineQuestions.forEach((q,i)=>{
-            const inp=document.createElement('input');
-            inp.placeholder=q; inp.id=`ans_${i}`;
+        document.getElementById('loader').style.display = 'none';
+        if (data.status === 'clarify') {
+          refineQuestions = data.questions;
+          const sec = document.getElementById('clarifySection');
+          sec.innerHTML = '<h3>Let’s clarify:</h3>';
+          refineQuestions.forEach((q,i) => {
+            const inp = document.createElement('input');
+            inp.placeholder = q; inp.id = `ans_${i}`;
             sec.appendChild(inp);
           });
-          const btn=document.createElement('button');
-          btn.textContent='Submit Answers'; btn.onclick=submitAnswers;
-          sec.appendChild(btn); sec.style.display='block';
-        } else if(data.status==='ready'){
+          const btn = document.createElement('button');
+          btn.textContent = 'Submit Answers'; btn.onclick = submitAnswers;
+          sec.appendChild(btn); sec.style.display = 'block';
+        } else if (data.status === 'ready') {
           generateCode(originalIdea);
         } else {
-          document.getElementById('responseArea').textContent='Unexpected response.';
+          document.getElementById('responseArea').textContent = 'Unexpected response.';
         }
-      } catch(e){
-        document.getElementById('loader').style.display='none';
-        document.getElementById('responseArea').textContent='⚠️ Request timed out. Please try again shortly.';
+      } catch (e) {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('responseArea').textContent = '⚠️ Request timed out. Please try again shortly.';
       }
     }
 
     async function submitAnswers(){
-      const answers=refineQuestions.map((_,i)=>document.getElementById(`ans_${i}`).value.trim());
-      const refined=originalIdea+'. '+answers.join(' ');
-      document.getElementById('clarifySection').style.display='none';
+      const answers = refineQuestions.map((_,i) => document.getElementById(`ans_${i}`).value.trim());
+      const refined = originalIdea + '. ' + answers.join(' ');
+      document.getElementById('clarifySection').style.display = 'none';
       generateCode(refined);
     }
 
     async function generateCode(idea){
-      document.getElementById('loader').style.display='block';
+      document.getElementById('loader').style.display = 'block';
       try {
-        const res=await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/generate-code',{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({
-            idea,target_user:'creators',
-            platform:'web app',features:['text generation','download']
+        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/generate-code',{
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            idea,
+            target_user: 'creators',
+            platform: 'web app',
+            features: ['text generation','download']
           })
-        }),API_TIMEOUT);
-        const data=await res.json();
-        document.getElementById('loader').style.display='none';
-        document.getElementById('responseArea').innerHTML=`
+        }), API_TIMEOUT);
+        const data = await res.json();
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('responseArea').innerHTML = `
           <h3>Tool Summary:</h3><pre>${data.spec}</pre>
           <h3>Generated Code:</h3><pre>${data.code}</pre>
           <h3>Setup Instructions:</h3><pre>${data.instructions}</pre>`;
-        document.getElementById('actionBtn').style.display='block';
-        document.getElementById('promptText').textContent='Describe your AI business idea:';
-      } catch(e){
-        document.getElementById('loader').style.display='none';
-        document.getElementById('responseArea').textContent='⚠️ Generation timeout. Please try again.';
+        document.getElementById('actionBtn').style.display = 'block';
+        document.getElementById('promptText').textContent = 'Describe your AI business idea:';
+      } catch (e) {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('responseArea').textContent = '⚠️ Generation timeout. Please try again.';
       }
     }
   </script>
