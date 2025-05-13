@@ -171,23 +171,40 @@
     }
     #settingsBtn:hover { background:rgba(0,0,0,.9); }
 
-    #settingsPanel {
-      position:fixed; bottom:140px; right:16px;
-      width:240px; padding:1rem;
-      background:rgba(20,20,20,.85);
-      backdrop-filter:blur(10px);
-      border-image:var(--metal-p) 1;
-      border-radius:12px;
-      box-shadow:0 0 12px rgba(0,0,0,.6);
-      display:none; z-index:2;
-      font-size:.95rem; color:inherit;
-    }
-    #settingsPanel h4 {
-      margin:0 0 .8rem; font-size:1.1rem;
-      text-align:center; font-weight:600;
-      background:linear-gradient(145deg,#9b59b6,#f1c40f);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    }
+#settingsPanel {
+  position:fixed;
+  bottom:140px;
+  right:16px;
+  width:240px;
+  padding:1rem;
+  background:rgba(20,20,20,.85);
+  backdrop-filter:blur(10px);
+  border-image:var(--metal-p) 1;
+  border-radius:12px;
+  box-shadow:0 0 12px rgba(0,0,0,.6);
+  display:none;
+  z-index:2;
+  font-size:.95rem;
+  color:inherit;
+}
+
+/* ← Add this block outside of #settingsPanel */
+body.theme-gold #settingsPanel,
+body.theme-gold #settingsPanel h4,
+body.theme-gold #settingsPanel .setting span {
+  color: var(--text-ice);
+}
+
+#settingsPanel h4 {
+  margin:0 0 .8rem;
+  font-size:1.1rem;
+  text-align:center;
+  font-weight:600;
+  background:linear-gradient(145deg,#9b59b6,#f1c40f);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
     .setting {
       display:flex; justify-content:space-between;
       align-items:center; margin-bottom:.8rem;
