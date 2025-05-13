@@ -42,7 +42,7 @@
     .typewriter-chat {
       position: absolute;
       background: rgba(0, 0, 0, 0.6);
-      color: #f1c40f;
+      color: #9b59b6;
       padding: 1rem;
       border-radius: 12px;
       font-family: 'Fira Code', monospace;
@@ -54,7 +54,7 @@
     }
     body.theme-gold .typewriter-chat {
       background: rgba(255, 255, 255, 0.2);
-      color: #9b59b6;
+      color: #f1c40f;
     }
     @keyframes fadeInOut {
       0% { opacity: 0; }
@@ -195,7 +195,6 @@
     <div class="response-area" id="responseArea"></div>
   </div>
   <button id="themeToggleBtn" onclick="toggleTheme()">Toggle Theme</button>
-
   <script>
     const phrases = [
       "An AI that writes ad copy for local cafes.",
@@ -209,20 +208,19 @@
       "Generate DM templates for influencer collabs.",
       "From idea to MVP, instantly."
     ];
-
     function spawnChatBubble(text) {
       const bubble = document.createElement("div");
       bubble.className = "typewriter-chat";
-      let leftOffset = Math.random() * 30;
-      if (Math.random() > 0.5) {
+      const leftSide = Math.random() < 0.5;
+      const leftOffset = Math.random() * 20 + 5;
+      const rightOffset = Math.random() * 20 + 5;
+      if (leftSide) {
         bubble.style.left = `${leftOffset}%`;
       } else {
-        bubble.style.right = `${leftOffset}%`;
-        bubble.style.left = "";
+        bubble.style.left = `${80 + rightOffset}%`;
       }
       bubble.style.top = `${Math.random() * 90}%`;
       document.getElementById("typewriterWrapper").appendChild(bubble);
-
       let index = 0;
       const typingInterval = setInterval(() => {
         if (index < text.length) {
@@ -235,12 +233,10 @@
         }
       }, 45);
     }
-
     setInterval(() => {
       const sample = phrases[Math.floor(Math.random() * phrases.length)];
       spawnChatBubble(sample);
     }, 2500);
-
     let followUpQuestions = [];
     function toggleTheme() {
       document.body.classList.toggle("theme-purple");
@@ -287,7 +283,9 @@
       }
     }
     async function submitAnswers() {
-      const answers = followUpQuestions.map((_, i) => document.getElementById(`answer_${i}`).value.trim());
+      const answers = followUpQuestions.map((_, i) =>
+        document.getElementById(`answer_${i}`).value.trim()
+      );
       const refinedIdea = document.getElementById("ideaInput").value + ". " + answers.join(" ");
       generateCode(refinedIdea);
     }
