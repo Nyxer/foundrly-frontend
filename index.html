@@ -84,9 +84,17 @@
       font-size: 1.1rem;
       font-weight: 500;
       margin-bottom: 1.5rem;
-      animation: fadeIn 1.2s ease-in-out;
+      animation: fadeInSlideUp 1.2s ease-in-out, glowPulse 1.5s ease-in-out infinite alternate;
       text-align: center;
       z-index: 2;
+    }
+    @keyframes fadeInSlideUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glowPulse {
+      0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5); }
+      100% { text-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 60px rgba(255, 255, 255, 1); }
     }
     .container {
       max-width: 640px;
@@ -167,18 +175,36 @@
       margin-top: 1rem;
       text-align: center;
     }
-    #themeToggleBtn {
+    #settingsBtn {
       position: fixed;
-      bottom: 16px;
+      bottom: 64px;
       right: 16px;
       padding: 0.5rem 1rem;
       border-radius: 6px;
-      font-size: 0.9rem;
-      z-index: 3;
+      font-size: 1.2rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      cursor: pointer;
+      z-index: 2;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    #settingsPanel {
+      display: none;
+      position: fixed;
+      bottom: 110px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1rem;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.9rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    #settingsPanel label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    #settingsPanel input {
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -195,6 +221,13 @@
     <div class="response-area" id="responseArea"></div>
   </div>
   <button id="themeToggleBtn" onclick="toggleTheme()">Toggle Theme</button>
+  <button id="settingsBtn" onclick="toggleSettings()">⚙️</button>
+  <div id="settingsPanel">
+    <label>🌗 Theme: <input type="checkbox" id="themeToggle" onclick="toggleTheme()" /></label>
+    <label>🎞️ Background Animation: <input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()" /></label>
+    <label>🖋️ Typing Speed: <input type="checkbox" id="fastTypingToggle" onclick="toggleTypingSpeed()" /></label>
+    <label>✨ Reduce Glow Mode: <input type="checkbox" id="glowToggle" onclick="toggleGlow()" /></label>
+  </div>
   <script>
     const phrases = [
       "An AI that writes ad copy for local cafes.",
@@ -208,6 +241,9 @@
       "Generate DM templates for influencer collabs.",
       "From idea to MVP, instantly."
     ];
+    let followUpQuestions = [];
+    let typingSpeed = 'normal';
+
     function spawnChatBubble(text) {
       const bubble = document.createElement("div");
       bubble.className = "typewriter-chat";
@@ -215,11 +251,11 @@
       const leftOffset = Math.random() * 20 + 5;
       const rightOffset = Math.random() * 20 + 5;
       if (leftSide) {
-        bubble.style.left = ${leftOffset}%;
+        bubble.style.left = `${leftOffset}%`;
       } else {
-        bubble.style.left = ${80 + rightOffset}%;
+        bubble.style.left = `${80 + rightOffset}%`;
       }
-      bubble.style.top = ${Math.random() * 90}%;
+      bubble.style.top = `${Math.random() * 90}%`;
       document.getElementById("typewriterWrapper").appendChild(bubble);
       let index = 0;
       const typingInterval = setInterval(() => {
@@ -231,90 +267,50 @@
           bubble.textContent += ".";
           setTimeout(() => bubble.remove(), 1000);
         }
-      }, 45);
+      }, typingSpeed === 'fast' ? 30 : 45);
     }
-    setInterval(() => {
-      const sample = phrases[Math.floor(Math.random() * phrases.length)];
-      spawnChatBubble(sample);
-    }, 2500);
-    let followUpQuestions = [];
+
+    function toggleSettings() {
+      const panel = document.getElementById("settingsPanel");
+      panel.style.display = panel.style.display === "none" || panel.style.display === "" ? "block" : "none";
+    }
+
     function toggleTheme() {
       document.body.classList.toggle("theme-purple");
       document.body.classList.toggle("theme-gold");
+      localStorage.setItem("theme", document.body.classList.contains("theme-purple") ? "purple" : "gold");
     }
-    async function submitIdea() {
-      const idea = document.getElementById("ideaInput").value;
-      const responseArea = document.getElementById("responseArea");
-      const questionsSection = document.getElementById("questionsSection");
-      const loader = document.getElementById("loader");
-      document.getElementById("submitAnswersBtn").style.display = "none";
-      questionsSection.innerHTML = "";
-      questionsSection.style.display = "none";
-      responseArea.innerHTML = "";
-      loader.style.display = "block";
-      try {
-        const refineRes = await fetch("https://foundrly-backend-1.onrender.com/api/refine-idea", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ idea })
-        });
-        const refineData = await refineRes.json();
-        loader.style.display = "none";
-        if (refineData.status === "clarify") {
-          followUpQuestions = refineData.questions;
-          responseArea.innerHTML = "<h3>// Need more details:</h3>";
-          followUpQuestions.forEach((q, i) => {
-            const input = document.createElement("input");
-            input.placeholder = q;
-            input.id = answer_${i};
-            questionsSection.appendChild(input);
-          });
-          questionsSection.style.display = "block";
-          document.getElementById("submitAnswersBtn").style.display = "inline-block";
-        } else if (refineData.status === "ready") {
-          generateCode(idea);
-        } else {
-          responseArea.innerHTML = "❗️ Unexpected response format.";
-        }
-      } catch (err) {
-        console.error(err);
-        loader.style.display = "none";
-        responseArea.innerHTML = "⚠️ Something went wrong.";
+
+    function toggleBackgroundAnimation() {
+      const wrapper = document.getElementById("typewriterWrapper");
+      wrapper.style.display = wrapper.style.display === "none" ? "block" : "none";
+      localStorage.setItem("bgAnim", wrapper.style.display === "none" ? "off" : "on");
+    }
+
+    function toggleTypingSpeed() {
+      typingSpeed = typingSpeed === 'normal' ? 'fast' : 'normal';
+      localStorage.setItem("typingSpeed", typingSpeed);
+    }
+
+    function toggleGlow() {
+      const slogan = document.querySelector(".slogan");
+      slogan.classList.toggle("no-glow");
+      localStorage.setItem("glow", slogan.classList.contains("no-glow") ? "off" : "on");
+    }
+
+    window.onload = () => {
+      // Load saved settings from localStorage
+      if (localStorage.getItem("theme") === "gold") {
+        toggleTheme();
       }
-    }
-    async function submitAnswers() {
-      const answers = followUpQuestions.map((_, i) =>
-        document.getElementById(answer_${i}).value.trim()
-      );
-      const refinedIdea = document.getElementById("ideaInput").value + ". " + answers.join(" ");
-      generateCode(refinedIdea);
-    }
-    async function generateCode(idea) {
-      const responseArea = document.getElementById("responseArea");
-      const loader = document.getElementById("loader");
-      loader.style.display = "block";
-      responseArea.innerHTML = "";
-      try {
-        const genRes = await fetch("https://foundrly-backend-1.onrender.com/api/generate-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            idea,
-            target_user: "creators",
-            platform: "web app",
-            features: ["text generation", "download"]
-          })
-        });
-        const genData = await genRes.json();
-        loader.style.display = "none";
-        responseArea.innerHTML = 
-          <h3>// Tool Summary</h3><pre>${genData.spec}</pre>
-          <h3>// Generated Code</h3><pre>${genData.code}</pre>
-          <h3>// Setup Instructions</h3><pre>${genData.instructions}</pre>;
-      } catch (err) {
-        console.error(err);
-        loader.style.display = "none";
-        responseArea.innerHTML = "⚠️ Failed to generate tool.";
+      if (localStorage.getItem("bgAnim") === "off") {
+        toggleBackgroundAnimation();
+      }
+      if (localStorage.getItem("typingSpeed") === "fast") {
+        toggleTypingSpeed();
+      }
+      if (localStorage.getItem("glow") === "off") {
+        toggleGlow();
       }
     }
   </script>
