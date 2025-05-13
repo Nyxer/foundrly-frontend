@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foundrly — Build Your AI Startup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet"> <!-- Font for Foundrly -->
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600&display=swap" rel="stylesheet"> <!-- Font for body -->
   <style>
     :root {
       --bg-purple: linear-gradient(to bottom right, #2d0059, #5e1aa2);
@@ -21,9 +22,9 @@
 
     body.theme-purple { background: var(--bg-purple); color: var(--ice-metallic-white); }
     body.theme-gold   { background: var(--bg-gold);  color: var(--metallic-black); }
-    
+
     body {
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Exo 2', sans-serif; /* Font for body text */
       margin: 0;
       padding: 2rem;
       display: flex;
@@ -57,12 +58,14 @@
       background: rgba(255,255,255,0.2);
       color: var(--accent-gold);
     }
+
     @keyframes fadeInOut {
       0%,100% { opacity: 0; }
       10%,90% { opacity: 1; }
     }
 
     .title {
+      font-family: 'Orbitron', sans-serif; /* Font for Foundrly title */
       font-size: 3rem; font-weight: 700;
       margin-bottom: 0.5rem; text-align: center;
       animation: fadeIn 1s ease;
@@ -122,9 +125,10 @@
       background-size: cover;
       color: var(--ice-metallic-white);
       margin-bottom: 1rem;
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Exo 2', sans-serif;
       resize: none;
       transition: color 0.3s ease, border-color 0.3s ease;
+      box-sizing: border-box;
     }
 
     body.theme-gold #ideaInput,
@@ -135,7 +139,7 @@
     }
 
     button {
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Exo 2', sans-serif;
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
       font-weight: bold;
