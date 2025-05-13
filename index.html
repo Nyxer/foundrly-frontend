@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foundrly — Build Your AI Startup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-purple: linear-gradient(to bottom right, #2d0059, #5e1aa2);
@@ -15,11 +15,15 @@
       --accent-gold: #f1c40f;
       --metallic-purple: linear-gradient(145deg, #5e1aa2, #9b59b6);
       --metallic-gold: linear-gradient(145deg, #f1c40f, #d4af37);
+      --ice-metallic-white: #d3e4f1;
+      --metallic-black: #222222;
     }
-    body.theme-purple { background: var(--bg-purple); color: var(--text-light); }
-    body.theme-gold   { background: var(--bg-gold);  color: var(--text-dark); }
+
+    body.theme-purple { background: var(--bg-purple); color: var(--ice-metallic-white); }
+    body.theme-gold   { background: var(--bg-gold);  color: var(--metallic-black); }
+    
     body {
-      font-family: 'Fira Code', monospace;
+      font-family: 'Orbitron', sans-serif;
       margin: 0;
       padding: 2rem;
       display: flex;
@@ -36,6 +40,7 @@
       width: 100vw; height: 100vh;
       pointer-events: none; z-index: 0;
     }
+
     .typewriter-chat {
       position: absolute;
       background: rgba(0,0,0,0.6);
@@ -63,11 +68,14 @@
       animation: fadeIn 1s ease;
       z-index: 2;
     }
+
     @keyframes fadeIn { from {opacity:0; transform:translateY(10px)} to {opacity:1; transform:translateY(0)} }
+
     body.theme-purple .title {
       background: linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
+
     body.theme-gold .title {
       background: linear-gradient(to right, #d4af37, #eacb84);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -75,53 +83,59 @@
 
     .slogan {
       font-size: 1.1rem; font-weight: 500;
-      margin-bottom: 1.5rem; text-align: center; z-index:2;
+      margin-bottom: 1.5rem; text-align: center; z-index: 2;
       animation: fadeInSlideUp 1.2s ease-in-out, glowPulse 1.5s ease-in-out infinite alternate;
     }
+
     @keyframes fadeInSlideUp {
-      0% { opacity:0; transform:translateY(20px) }
-      100% { opacity:1; transform:translateY(0) }
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
+
     @keyframes glowPulse {
-      0%   { text-shadow: 0 0 10px rgba(255,255,255,0.7) }
-      100% { text-shadow: 0 0 30px rgba(255,255,255,1) }
+      0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+      100% { text-shadow: 0 0 30px rgba(255, 255, 255, 1); }
     }
 
     .container {
       width: 100%; max-width: 720px;
-      background: rgba( 255,255,255,0.06 );
+      background: rgba(255,255,255,0.06);
       border-radius: 16px;
       padding: 2rem;
-      box-shadow: 0 0 16px rgba(0,0,0,0.5);
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
       z-index: 1;
       margin-bottom: 4rem;
     }
 
-    /* Central hub: textarea or clarify inputs */
     #promptText {
       font-size: 1rem; margin-bottom: 0.5rem;
     }
+
     #ideaInput, .clarify-container input {
       width: 100%;
       padding: 1rem;
       font-size: 1rem;
       border-radius: 10px;
-      border: 1px solid #555;
-      background-image: var(--metallic-purple);
+      border: 2px solid transparent;
+      background: var(--metallic-purple);
+      background-image: linear-gradient(145deg, rgba(0,0,0,0.1), rgba(255,255,255,0.1));
       background-size: cover;
-      background-blend-mode: overlay;
-      color: #f1c40f;
+      color: var(--ice-metallic-white);
       margin-bottom: 1rem;
-      font-family: 'Fira Code', monospace;
+      font-family: 'Orbitron', sans-serif;
+      resize: none;
+      transition: color 0.3s ease, border-color 0.3s ease;
     }
+
     body.theme-gold #ideaInput,
     body.theme-gold .clarify-container input {
-      background-image: var(--metallic-gold);
-      color: #9b59b6;
+      background: var(--metallic-gold);
+      color: var(--metallic-black);
+      border-color: transparent;
     }
 
     button {
-      font-family: 'Fira Code', monospace;
+      font-family: 'Orbitron', sans-serif;
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
       font-weight: bold;
@@ -133,10 +147,12 @@
       box-shadow: 0 0 12px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
     }
+
     body.theme-gold button {
       background-image: var(--metallic-gold);
-      color: #1a1a1a;
+      color: var(--metallic-black);
     }
+
     button:hover { transform: scale(1.05); }
 
     #loader {
@@ -146,38 +162,55 @@
       font-size: 1.1rem;
     }
 
-    /* Response output panels: translucent theme */
     #responseArea pre {
-      background: rgba(155,89,182,0.2);
-      color: var(--text-light);
+      background: rgba(155, 89, 182, 0.2);
+      color: var(--ice-metallic-white);
       padding: 1rem;
       border-radius: 8px;
       white-space: pre-wrap;
     }
+
     body.theme-gold #responseArea pre {
-      background: rgba(241,196,15,0.2);
-      color: var(--text-dark);
+      background: rgba(241, 196, 15, 0.2);
+      color: var(--metallic-black);
     }
 
-    /* Settings */
     #settingsBtn {
-      position: fixed; bottom: 64px; right: 16px;
-      background: rgba(0,0,0,0.6); color: #fff;
-      padding: 0.5rem; font-size:1.4rem;
-      border-radius: 6px; cursor: pointer; z-index:2;
+      position: fixed;
+      bottom: 64px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 0.5rem;
+      font-size: 1.4rem;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 2;
     }
+
     #settingsPanel {
       display: none;
-      position: fixed; bottom: 110px; right: 16px;
-      background: rgba(0,0,0,0.7); color: #fff;
-      padding: 1rem; border-radius:10px;
-      box-shadow:0 0 10px rgba(0,0,0,0.5);
-      font-size:0.9rem; z-index:2;
+      position: fixed;
+      bottom: 110px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      font-size: 0.9rem;
+      z-index: 2;
     }
+
     #settingsPanel label {
-      display:block; margin-bottom:0.75rem;
+      display: block;
+      margin-bottom: 0.75rem;
     }
-    #settingsPanel input { margin-right:0.5rem; }
+
+    #settingsPanel input {
+      margin-right: 0.5rem;
+    }
+
   </style>
 </head>
 <body class="theme-purple">
@@ -223,16 +256,16 @@
     function spawnChatBubble(text) {
       const bubble = document.createElement("div");
       bubble.className = "typewriter-chat";
-      bubble.style.left = `${Math.random()*70+5}%`;
-      bubble.style.top  = `${Math.random()*90}%`;
+      bubble.style.left = `${Math.random() * 70 + 5}%`;
+      bubble.style.top = `${Math.random() * 90 + 5}%`;
       document.getElementById("typewriterWrapper").appendChild(bubble);
-      let i=0;
+      let i = 0;
       const interval = setInterval(() => {
-        if (i<text.length) bubble.textContent+=text[i++];
-        else { clearInterval(interval); bubble.textContent+="."; setTimeout(()=>bubble.remove(),1000); }
-      }, typingSpeed==='fast'?30:45);
+        if (i < text.length) bubble.textContent += text[i++];
+        else { clearInterval(interval); bubble.textContent += "."; setTimeout(() => bubble.remove(), 1000); }
+      }, typingSpeed === 'fast' ? 30 : 45);
     }
-    setInterval(() => spawnChatBubble(phrases[Math.floor(Math.random()*phrases.length)]), 2500);
+    setInterval(() => spawnChatBubble(phrases[Math.floor(Math.random() * phrases.length)]), 2500);
 
     async function submitIdea() {
       originalIdea = document.getElementById("ideaInput").value.trim();
@@ -244,28 +277,29 @@
       document.getElementById("actionBtn").style.display = 'none';
 
       const res = await fetch("https://foundrly-backend-1.onrender.com/api/refine-idea", {
-        method:"POST", headers:{"Content-Type":"application/json"},
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idea: originalIdea })
       });
       const data = await res.json();
       document.getElementById("loader").style.display = 'none';
 
-      if (data.status==="clarify") {
+      if (data.status === "clarify") {
         refineQuestions = data.questions;
         const sec = document.getElementById("clarifySection");
         sec.innerHTML = '<h3>Let’s clarify a few things:</h3>';
-        refineQuestions.forEach((q,i)=>{
+        refineQuestions.forEach((q, i) => {
           const inp = document.createElement("input");
-          inp.placeholder = q; inp.id = `ans_${i}`;
+          inp.placeholder = q;
+          inp.id = `ans_${i}`;
           sec.appendChild(inp);
         });
         const btn = document.createElement("button");
-        btn.textContent="Submit Answers";
+        btn.textContent = "Submit Answers";
         btn.onclick = submitAnswers;
         sec.appendChild(btn);
         sec.style.display = 'block';
       }
-      else if (data.status==="ready") {
+      else if (data.status === "ready") {
         generateCode(originalIdea);
       } else {
         document.getElementById("responseArea").textContent = "Unexpected response.";
@@ -273,7 +307,7 @@
     }
 
     async function submitAnswers() {
-      const answers = refineQuestions.map((_,i)=>document.getElementById(`ans_${i}`).value.trim());
+      const answers = refineQuestions.map((_, i) => document.getElementById(`ans_${i}`).value.trim());
       const refined = originalIdea + ". " + answers.join(" ");
       document.getElementById("clarifySection").style.display = 'none';
       generateCode(refined);
@@ -282,10 +316,10 @@
     async function generateCode(idea) {
       document.getElementById("loader").style.display = 'block';
       const res = await fetch("https://foundrly-backend-1.onrender.com/api/generate-code", {
-        method:"POST", headers:{"Content-Type":"application/json"},
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           idea, target_user: "creators",
-          platform: "web app", features:["text generation","download"]
+          platform: "web app", features: ["text generation", "download"]
         })
       });
       const data = await res.json();
@@ -294,7 +328,6 @@
         <h3>Tool Summary:</h3><pre>${data.spec}</pre>
         <h3>Generated Code:</h3><pre>${data.code}</pre>
         <h3>Setup Instructions:</h3><pre>${data.instructions}</pre>`;
-      // bring back hub
       document.getElementById("actionBtn").style.display = 'block';
       document.getElementById("promptText").textContent = "Describe your AI business idea:";
       document.getElementById("ideaInput").style.display = 'block';
@@ -302,33 +335,38 @@
 
     function toggleSettings() {
       const p = document.getElementById("settingsPanel");
-      p.style.display = p.style.display==='block'? 'none':'block';
+      p.style.display = p.style.display === 'block' ? 'none' : 'block';
     }
+
     function toggleTheme() {
       document.body.classList.toggle("theme-purple");
       document.body.classList.toggle("theme-gold");
-      localStorage.setItem("theme", document.body.classList.contains("theme-purple")?"purple":"gold");
+      localStorage.setItem("theme", document.body.classList.contains("theme-purple") ? "purple" : "gold");
     }
+
     function toggleBackgroundAnimation() {
       const w = document.getElementById("typewriterWrapper");
-      w.style.display = w.style.display==='none'? 'block':'none';
+      w.style.display = w.style.display === 'none' ? 'block' : 'none';
       localStorage.setItem("bgAnim", w.style.display);
     }
+
     function toggleTypingSpeed() {
-      typingSpeed = typingSpeed==='normal'? 'fast':'normal';
+      typingSpeed = typingSpeed === 'normal' ? 'fast' : 'normal';
       localStorage.setItem("typingSpeed", typingSpeed);
     }
+
     function toggleGlow() {
       document.querySelector(".slogan").classList.toggle("no-glow");
-      localStorage.setItem("glow", document.querySelector(".slogan").classList.contains("no-glow")?"off":"on");
+      localStorage.setItem("glow", document.querySelector(".slogan").classList.contains("no-glow") ? "off" : "on");
     }
 
     window.onload = () => {
-      if(localStorage.getItem("theme")==="gold") toggleTheme();
-      if(localStorage.getItem("bgAnim")==="none") toggleBackgroundAnimation();
-      if(localStorage.getItem("typingSpeed")==="fast") toggleTypingSpeed();
-      if(localStorage.getItem("glow")==="off") toggleGlow();
+      if (localStorage.getItem("theme") === "gold") toggleTheme();
+      if (localStorage.getItem("bgAnim") === "none") toggleBackgroundAnimation();
+      if (localStorage.getItem("typingSpeed") === "fast") toggleTypingSpeed();
+      if (localStorage.getItem("glow") === "off") toggleGlow();
     };
   </script>
+
 </body>
 </html>
