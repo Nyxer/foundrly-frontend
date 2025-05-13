@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foundrly — Build Your AI Startup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-purple: linear-gradient(to bottom right, #2d0059, #5e1aa2);
@@ -16,16 +16,10 @@
       --accent-hover-purple: #732d91;
       --accent-hover-gold: #d1a70a;
     }
-    body.theme-purple {
-      background: var(--bg-purple);
-      color: var(--text-light);
-    }
-    body.theme-gold {
-      background: var(--bg-gold);
-      color: var(--text-dark);
-    }
+    body.theme-purple { background: var(--bg-purple); color: var(--text-light); }
+    body.theme-gold { background: var(--bg-gold); color: var(--text-dark); }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Fira Code', monospace;
       margin: 0;
       padding: 2rem;
       display: flex;
@@ -33,22 +27,16 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      transition: background 0.5s ease, color 0.5s ease;
       overflow: hidden;
+      transition: background 0.5s ease, color 0.5s ease;
     }
     .background-codes {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+      overflow: hidden; pointer-events: none;
     }
     .code-float {
       position: absolute;
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255,255,255,0.3);
       font-size: 14px;
       white-space: pre;
       animation: floatCode 20s linear infinite;
@@ -87,7 +75,7 @@
     .container {
       max-width: 720px;
       width: 100%;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.06);
       border-radius: 16px;
       padding: 2rem;
       box-shadow: 0 0 16px rgba(0,0,0,0.5);
@@ -96,12 +84,33 @@
     }
     textarea {
       width: 100%;
-      height: 120px;
+      height: 140px;
+      padding: 1rem;
+      border-radius: 10px;
+      background: #111;
+      border: 1px solid #444;
+      color: #00ff88;
+      font-size: 0.95rem;
+      font-family: 'Fira Code', monospace;
+    }
+    pre {
+      background: #111;
+      color: #00ffaa;
       padding: 1rem;
       border-radius: 8px;
-      font-size: 1rem;
-      border: none;
-      resize: none;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      font-family: 'Fira Code', monospace;
+    }
+    .questions-container input {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #222;
+      color: #0f0;
     }
     button {
       margin-top: 1rem;
@@ -115,39 +124,9 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    body.theme-gold button {
-      background-color: var(--accent-gold);
-      color: #1a1a1a;
-    }
-    body.theme-purple button:hover {
-      background-color: var(--accent-hover-purple);
-    }
-    body.theme-gold button:hover {
-      background-color: var(--accent-hover-gold);
-    }
-    .response-area {
-      margin-top: 2rem;
-    }
-    pre {
-      background: rgba(0, 0, 0, 0.5);
-      padding: 1rem;
-      white-space: pre-wrap;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-    .questions-container input {
-      width: 100%;
-      margin-bottom: 1rem;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 6px;
-    }
-    #loader {
-      display: none;
-      margin-top: 1rem;
-    }
+    body.theme-gold button { background-color: var(--accent-gold); color: #1a1a1a; }
+    body.theme-purple button:hover { background-color: var(--accent-hover-purple); }
+    body.theme-gold button:hover { background-color: var(--accent-hover-gold); }
     #themeToggleBtn {
       position: fixed;
       bottom: 16px;
@@ -167,7 +146,7 @@
   <div class="background-codes" id="backgroundCodes"></div>
   <div class="title">Foundrly</div>
   <div class="slogan">Your Cofounder Doesn’t Have to Be Human.</div>
-  <div class="container" style="margin-left: auto; margin-right: auto;">
+  <div class="container">
     <textarea id="ideaInput" placeholder="e.g. An AI that generates Instagram captions for stylists..."></textarea>
     <button onclick="submitIdea()">Build It</button>
     <div id="loader">⏳ Generating...</div>
@@ -202,7 +181,7 @@
         loader.style.display = "none";
         if (refineData.status === "clarify") {
           followUpQuestions = refineData.questions;
-          responseArea.innerHTML = "<h3>We need a bit more info:</h3>";
+          responseArea.innerHTML = "<h3>// Need more details:</h3>";
           followUpQuestions.forEach((q, i) => {
             const input = document.createElement("input");
             input.placeholder = q;
@@ -246,19 +225,15 @@
         const genData = await genRes.json();
         loader.style.display = "none";
         responseArea.innerHTML = `
-          <h3>📋 Tool Summary:</h3>
-          <pre>${genData.spec}</pre>
-          <h3>💻 Generated Code:</h3>
-          <pre>${genData.code}</pre>
-          <h3>⚙️ Setup Instructions:</h3>
-          <pre>${genData.instructions}</pre>`;
+          <h3>// Tool Summary</h3><pre>${genData.spec}</pre>
+          <h3>// Generated Code</h3><pre>${genData.code}</pre>
+          <h3>// Setup Instructions</h3><pre>${genData.instructions}</pre>`;
       } catch (err) {
         console.error(err);
         loader.style.display = "none";
         responseArea.innerHTML = "⚠️ Failed to generate tool.";
       }
     }
-    // floating background text
     window.onload = () => {
       const bg = document.getElementById("backgroundCodes");
       const snippets = [
@@ -293,12 +268,12 @@
         "An AI that generates CTAs for SaaS homepages",
         "An AI that remixes customer reviews into ad copy"
       ];
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 18; i++) {
         const el = document.createElement("div");
         el.className = "code-float";
         el.style.left = Math.random() * 100 + "%";
         el.style.top = Math.random() * 100 + "%";
-        el.style.animationDuration = 12 + Math.random() * 12 + "s";
+        el.style.animationDuration = 10 + Math.random() * 10 + "s";
         el.innerText = snippets[Math.floor(Math.random() * snippets.length)];
         bg.appendChild(el);
       }
