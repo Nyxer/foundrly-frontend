@@ -36,15 +36,17 @@
       transition: background 0.5s ease, color 0.5s ease;
     }
 
+    /* Adjusted background text animations */
     .typewriter-wrapper {
-      position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      position: fixed; top: 25%; left: 20%;
+      width: 60vw; height: 60vh;
       pointer-events: none; z-index: 0;
+      opacity: 0.2; /* Reduced opacity */
     }
 
     .typewriter-chat {
       position: absolute;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.3);
       color: var(--accent-purple);
       padding: 1.5rem;
       border-radius: 12px;
@@ -210,13 +212,50 @@
       z-index: 2;
     }
 
-    #settingsPanel label {
-      display: block;
-      margin-bottom: 1rem; /* Increased margin */
+    /* Modern settings toggle switches */
+    .settings-toggle {
+      display: inline-block;
+      position: relative;
+      width: 60px;
+      height: 34px;
     }
 
-    #settingsPanel input {
-      margin-right: 0.75rem; /* Increased spacing */
+    .settings-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .settings-toggle .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .settings-toggle .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      border-radius: 50%;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
     }
 
   </style>
@@ -238,10 +277,26 @@
 
   <button id="settingsBtn" onclick="toggleSettings()">⚙️</button>
   <div id="settingsPanel">
-    <label>🌗 Theme: <input type="checkbox" id="themeToggle" onclick="toggleTheme()"></label>
-    <label>🎞️ Background Animation: <input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()"></label>
-    <label>🖋️ Typing Speed: <input type="checkbox" id="fastTypingToggle" onclick="toggleTypingSpeed()"></label>
-    <label>✨ Reduce Glow: <input type="checkbox" id="glowToggle" onclick="toggleGlow()"></label>
+    <label for="themeToggle">🌗 Theme</label>
+    <label class="settings-toggle">
+      <input type="checkbox" id="themeToggle" onclick="toggleTheme()">
+      <span class="slider"></span>
+    </label>
+    <label for="bgAnimToggle">🎞️ Background Animation</label>
+    <label class="settings-toggle">
+      <input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()">
+      <span class="slider"></span>
+    </label>
+    <label for="fastTypingToggle">🖋️ Typing Speed</label>
+    <label class="settings-toggle">
+      <input type="checkbox" id="fastTypingToggle" onclick="toggleTypingSpeed()">
+      <span class="slider"></span>
+    </label>
+    <label for="glowToggle">✨ Reduce Glow</label>
+    <label class="settings-toggle">
+      <input type="checkbox" id="glowToggle" onclick="toggleGlow()">
+      <span class="slider"></span>
+    </label>
   </div>
 
   <script>
@@ -369,12 +424,4 @@
     }
 
     window.onload = () => {
-      if (localStorage.getItem("theme") === "gold") toggleTheme();
-      if (localStorage.getItem("bgAnim") === "none") toggleBackgroundAnimation();
-      if (localStorage.getItem("typingSpeed") === "fast") toggleTypingSpeed();
-      if (localStorage.getItem("glow") === "off") toggleGlow();
-    };
-  </script>
-
-</body>
-</html>
+      if (localStorage.getItem("theme") === "gold
