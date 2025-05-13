@@ -1,221 +1,19 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Foundrly — Build Your AI Startup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-purple: linear-gradient(to bottom right, #2d0059, #5e1aa2);
-      --bg-gold:   linear-gradient(to bottom right, #5f4200, #d4af37);
-      --text-ice:  #d3e4f1;
-      --text-black:#222222;
-      --accent-p:  #9b59b6;
-      --accent-g:  #f1c40f;
-      --metal-p:   linear-gradient(145deg,#5e1aa2,#9b59b6);
-      --metal-g:   linear-gradient(145deg,#f1c40f,#d4af37);
-    }
-    body.theme-purple { background: var(--bg-purple); color: var(--text-ice); }
-    body.theme-gold   { background: var(--bg-gold);   color: var(--text-black); }
-    body {
-      font-family: 'Exo 2', sans-serif;
-      margin:0; padding:4rem;
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:flex-start;
-      min-height:100vh; overflow:auto;
-      transition:background .5s, color .5s;
-      position:relative;
-    }
-
-    /* Onboarding tooltip */
-    #onboard {
-      position:fixed; top:20%; left:50%; transform:translateX(-50%);
-      background:rgba(0,0,0,.75); color:#fff;
-      padding:1rem 1.5rem; border-radius:8px;
-      font-size:1rem; z-index:3; max-width:300px; text-align:center;
-      animation:fadeIn 1s ease;
-    }
-    #onboard button {
-      margin-top:.5rem; padding:.4rem .8rem;
-      font-size:.9rem; background:var(--accent-p);
-      border:none; border-radius:4px; cursor:pointer;
-    }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-    /* Background chat bubbles */
-    .typewriter-wrapper {
-      position:fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      pointer-events:none; z-index:0;
-      opacity:.15;
-    }
-    .typewriter-chat {
-      position:absolute;
-      background:rgba(0,0,0,.3);
-      color:var(--accent-p);
-      padding:1rem; border-radius:8px;
-      font-size:.9rem; max-width:240px;
-      opacity:0; white-space:pre-wrap;
-      animation:fadeInOut 6s ease-in-out forwards;
-    }
-    body.theme-gold .typewriter-chat {
-      background:rgba(255,255,255,.2);
-      color:var(--accent-g);
-    }
-    @keyframes fadeInOut {
-      0%,100%{opacity:0} 10%,90%{opacity:1}
-    }
-
-    /* Hero animations */
-    @keyframes heroFade {
-      from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)}
-    }
-    @keyframes heroSlide {
-      from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}
-    }
-    .no-hero-anim .title,
-    .no-hero-anim .slogan {
-      animation: none !important;
-    }
-
-    .title {
-      font-family:'Orbitron',sans-serif;
-      font-size:4rem; margin:1rem 0 .5rem;
-      text-align:center;
-      animation:heroFade 1s ease forwards;
-      z-index:1;
-    }
-    body.theme-purple .title {
-      background:linear-gradient(to right,#a770ef,#cf8bf3,#fdb99b);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    }
-    body.theme-gold .title {
-      background:linear-gradient(to right,#d4af37,#eacb84);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    }
-
-    .slogan {
-      font-size:1.5rem; font-weight:500;
-      margin-bottom:2rem; text-align:center;
-      animation:heroSlide 1.2s ease-in-out forwards;
-      z-index:1;
-    }
-
-    .container {
-      width:100%; max-width:800px;
-      background:rgba(255,255,255,.06);
-      border-radius:12px; padding:2.5rem;
-      box-shadow:0 0 16px rgba(0,0,0,.4);
-      z-index:1; margin-bottom:4rem;
-    }
-
-    #promptText { font-size:1.2rem; margin-bottom:1rem; }
-    textarea, .clarify-container input {
-      width:100%; padding:1.25rem;
-      font-size:1.1rem; border-radius:8px;
-      border:2px solid transparent;
-      background-image:var(--metal-p);
-      background-blend-mode:overlay; background-color:rgba(0,0,0,.1);
-      color:inherit; margin-bottom:1.5rem;
-      resize:none; box-sizing:border-box;
-      font-family:'Exo 2',sans-serif;
-    }
-    body.theme-gold textarea,
-    body.theme-gold .clarify-container input {
-      background-image:var(--metal-g);
-    }
-
-    button {
-      padding:1rem 2rem; font-size:1.2rem;
-      background-image:var(--metal-p); color:#fff;
-      border:none; border-radius:8px;
-      box-shadow:0 0 12px rgba(0,0,0,.3);
-      cursor:pointer; transition:transform .2s;
-    }
-    body.theme-gold button {
-      background-image:var(--metal-g); color:var(--text-black);
-    }
-    button:hover { transform:scale(1.05); }
-
-    #loader {
-      display:none; margin:1.5rem 0; font-size:1.3rem; text-align:center;
-    }
-    #responseArea pre {
-      background:rgba(155,89,182,.2);
-      padding:1rem; border-radius:8px;
-      white-space:pre-wrap; font-size:1.1rem;
-      color:inherit;
-    }
-    body.theme-gold #responseArea pre {
-      background:rgba(241,196,15,.2);
-    }
-
-    /* Techy settings panel */
-    #settingsBtn {
-      position:fixed; bottom:80px; right:16px;
-      background:rgba(0,0,0,.7); color:#fff;
-      padding:.6rem; border-radius:50%;
-      font-size:1.6rem; cursor:pointer; z-index:2;
-      transition:background .3s;
-    }
-    #settingsBtn:hover { background:rgba(0,0,0,.9); }
-
-    #settingsPanel {
-      position:fixed; bottom:140px; right:16px;
-      width:220px; padding:1rem;
-      background:rgba(20,20,20,.85);
-      border:2px solid transparent;
-      border-image:var(--metal-p) 1;
-      border-radius:12px;
-      box-shadow:0 0 12px rgba(0,0,0,.6);
-      display:none; z-index:2;
-      font-size:.95rem; color:inherit;
-    }
-    #settingsPanel h4 {
-      margin:0 0 .8rem; font-size:1.1rem;
-      text-align:center; font-weight:600;
-    }
-    .setting {
-      display:flex; justify-content:space-between;
-      align-items:center; margin-bottom:.8rem;
-    }
-    .toggle {
-      position:relative; width:50px; height:24px;
-    }
-    .toggle input {
-      opacity:0; width:0; height:0;
-    }
-    .slider {
-      position:absolute; cursor:pointer;
-      top:0; left:0; right:0; bottom:0;
-      background:#555; border-radius:24px;
-      transition:.3s;
-    }
-    .slider:before {
-      content:""; position:absolute;
-      height:18px; width:18px;
-      left:3px; bottom:3px;
-      background:#fff; border-radius:50%;
-      transition:.3s;
-    }
-    input:checked + .slider {
-      background:var(--accent-p);
-    }
-    input:checked + .slider:before {
-      transform:translateX(26px);
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body class="theme-purple">
-
   <div id="onboard">
     Welcome to Foundrly!<br>
     1️⃣ Describe your AI idea.<br>
     2️⃣ Click “Build It.”<br>
     3️⃣ Tweak settings ⚙️ as you like.<br>
-    <button onclick="this.parentNode.remove()">Got it!</button>
+    <button id="onboardDismiss">Got it!</button>
   </div>
 
   <div class="typewriter-wrapper" id="typewriterWrapper"></div>
@@ -226,173 +24,474 @@
     <div id="promptText">Describe your AI business idea:</div>
     <textarea id="ideaInput" placeholder="e.g. An AI that writes Instagram captions for barbers..."></textarea>
     <div class="clarify-container" id="clarifySection" style="display:none;"></div>
-    <button id="actionBtn" onclick="submitIdea()">Build It</button>
-    <div id="loader">⏳ Generating...</div>
+    <button id="actionBtn">Build It</button>
+    <div id="loader">
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line short"></div>
+      <div class="skeleton-line"></div>
+    </div>
     <div id="responseArea"></div>
   </div>
 
-  <button id="settingsBtn" onclick="toggleSettings()">⚙️</button>
+  <button id="settingsBtn">⚙️</button>
   <div id="settingsPanel">
     <h4>Settings</h4>
     <div class="setting">
       <span>Theme</span>
-      <label class="toggle"><input type="checkbox" id="themeToggle" onclick="toggleTheme()"><span class="slider"></span></label>
+      <label class="toggle">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider"></span>
+      </label>
     </div>
     <div class="setting">
-      <span>Bg Animations</span>
-      <label class="toggle"><input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()"><span class="slider"></span></label>
+      <span>Chat Bubbles</span>
+      <label class="toggle">
+        <input type="checkbox" id="bgAnimToggle">
+        <span class="slider"></span>
+      </label>
     </div>
     <div class="setting">
-      <span>Hero Animations</span>
-      <label class="toggle"><input type="checkbox" id="heroAnimToggle" onclick="toggleHeroAnimation()"><span class="slider"></span></label>
+      <span>Onboarding Tips</span>
+      <label class="toggle">
+        <input type="checkbox" id="onboardToggle">
+        <span class="slider"></span>
+      </label>
     </div>
     <div class="setting">
-      <span>Parallax</span>
-      <label class="toggle"><input type="checkbox" id="parallaxToggle" onclick="toggleParallax()"><span class="slider"></span></label>
+      <span>Button Animation</span>
+      <label class="toggle">
+        <input type="checkbox" id="btnAnimToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="setting">
+      <button id="restoreDefaults">Restore Defaults</button>
     </div>
   </div>
-  <script>
-    const phrases = [
-      "An AI that writes ad copy for local cafes.",
-      "A tool that builds landing pages from voice notes.",
-      "An assistant that summarizes client feedback.",
-      "An AI that auto-generates slogans for fashion brands.",
-      "A bot that responds to DMs for digital creators.",
-      "An AI that repackages blog posts into carousels.",
-      "A caption creator for streetwear drops.",
-      "Turn review comments into testimonials."
-    ];
-    let typingSpeed = 'normal', refineQuestions = [], originalIdea = '';
-    const API_TIMEOUT = 10000;
 
-    function spawnBubbles() {
-      const count = 4 + Math.floor(Math.random()*2);
-      for (let i=0; i<count; i++) spawnChatBubble();
-    }
-    function spawnChatBubble() {
-      const text = phrases[Math.floor(Math.random()*phrases.length)];
-      const bubble = document.createElement('div');
-      bubble.className = 'typewriter-chat';
-      const side = Math.random()<0.5 ? 'left' : 'right';
-      bubble.style[side] = (side==='left' ? 10+Math.random()*10 : 80+Math.random()*10) + '%';
-      bubble.style.top   = (10+Math.random()*80) + '%';
-      document.getElementById('typewriterWrapper').appendChild(bubble);
-      let i=0;
-      const iv = setInterval(()=>{
-        if(i<text.length) bubble.textContent += text[i++];
-        else { clearInterval(iv); bubble.textContent+='.'; setTimeout(()=>bubble.remove(),1000); }
-      },40);
-    }
-    setInterval(spawnBubbles,3000);
-
-    function toggleSettings(){
-      const p = document.getElementById('settingsPanel');
-      p.style.display = p.style.display==='block' ? 'none' : 'block';
-    }
-    function toggleTheme(){
-      document.body.classList.toggle('theme-purple');
-      document.body.classList.toggle('theme-gold');
-      localStorage.setItem('theme',
-        document.body.classList.contains('theme-purple')?'purple':'gold');
-    }
-    function toggleBackgroundAnimation(){
-      const w = document.getElementById('typewriterWrapper');
-      w.style.display = w.style.display==='none' ? 'block' : 'none';
-      localStorage.setItem('bgAnim', w.style.display);
-    }
-    function toggleHeroAnimation(){
-      document.body.classList.toggle('no-hero-anim');
-      localStorage.setItem('heroAnim',
-        document.body.classList.contains('no-hero-anim')?'off':'on');
-    }
-    function toggleParallax(){
-      document.body.classList.toggle('no-parallax');
-      localStorage.setItem('parallax',
-        document.body.classList.contains('no-parallax')?'off':'on');
-    }
-
-    window.onload = () => {
-      if(localStorage.getItem('theme')==='gold') toggleTheme();
-      if(localStorage.getItem('bgAnim')==='none') toggleBackgroundAnimation();
-      if(localStorage.getItem('heroAnim')==='off') toggleHeroAnimation();
-      if(localStorage.getItem('parallax')==='off') toggleParallax();
-      setTimeout(() => document.getElementById('onboard')?.remove(), 6000);
-    };
-
-    function withTimeout(p, t){
-      const tm = new Promise((_, r)=> setTimeout(()=>r(new Error('Timeout')), t));
-      return Promise.race([p, tm]);
-    }
-
-    async function submitIdea(){
-      originalIdea = document.getElementById('ideaInput').value.trim();
-      if (!originalIdea) return;
-      document.getElementById('loader').style.display = 'block';
-      document.getElementById('responseArea').innerHTML = '';
-      document.getElementById('clarifySection').style.display = 'none';
-      document.getElementById('actionBtn').style.display = 'none';
-      try {
-        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/refine-idea',{
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ idea: originalIdea })
-        }), API_TIMEOUT);
-        const data = await res.json();
-        document.getElementById('loader').style.display = 'none';
-        if (data.status === 'clarify') {
-          refineQuestions = data.questions;
-          const sec = document.getElementById('clarifySection');
-          sec.innerHTML = '<h3>Let’s clarify:</h3>';
-          refineQuestions.forEach((q,i) => {
-            const inp = document.createElement('input');
-            inp.placeholder = q; inp.id = `ans_${i}`;
-            sec.appendChild(inp);
-          });
-          const btn = document.createElement('button');
-          btn.textContent = 'Submit Answers'; btn.onclick = submitAnswers;
-          sec.appendChild(btn); sec.style.display = 'block';
-        } else if (data.status === 'ready') {
-          generateCode(originalIdea);
-        } else {
-          document.getElementById('responseArea').textContent = 'Unexpected response.';
-        }
-      } catch (e) {
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('responseArea').textContent = '⚠️ Request timed out. Please try again shortly.';
-      }
-    }
-
-    async function submitAnswers(){
-      const answers = refineQuestions.map((_,i) => document.getElementById(`ans_${i}`).value.trim());
-      const refined = originalIdea + '. ' + answers.join(' ');
-      document.getElementById('clarifySection').style.display = 'none';
-      generateCode(refined);
-    }
-
-    async function generateCode(idea){
-      document.getElementById('loader').style.display = 'block';
-      try {
-        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/generate-code',{
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({
-            idea,
-            target_user: 'creators',
-            platform: 'web app',
-            features: ['text generation','download']
-          })
-        }), API_TIMEOUT);
-        const data = await res.json();
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('responseArea').innerHTML = `
-          <h3>Tool Summary:</h3><pre>${data.spec}</pre>
-          <h3>Generated Code:</h3><pre>${data.code}</pre>
-          <h3>Setup Instructions:</h3><pre>${data.instructions}</pre>`;
-        document.getElementById('actionBtn').style.display = 'block';
-        document.getElementById('promptText').textContent = 'Describe your AI business idea:';
-      } catch (e) {
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('responseArea').textContent = '⚠️ Generation timeout. Please try again.';
-      }
-    }
-  </script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
+/* styles.css */
+:root {
+  --bg-purple: linear-gradient(to bottom right, #2d0059, #5e1aa2);
+  --bg-gold:   linear-gradient(to bottom right, #5f4200, #d4af37);
+  --text-ice:  #d3e4f1;
+  --text-black:#222222;
+  --accent-p:  #9b59b6;
+  --accent-g:  #f1c40f;
+  --metal-p:   linear-gradient(145deg,#5e1aa2,#9b59b6);
+  --metal-g:   linear-gradient(145deg,#f1c40f,#d4af37);
+}
+
+body.theme-purple { background: var(--bg-purple); color: var(--text-ice); }
+body.theme-gold   { background: var(--bg-gold);   color: var(--text-black); }
+body {
+  font-family: 'Exo 2', sans-serif;
+  margin:0; padding:4rem;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-start;
+  min-height:100vh; overflow:auto;
+  transition:background .5s, color .5s;
+  position:relative;
+}
+
+/* Onboarding tooltip */
+#onboard {
+  position:fixed; top:20%; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,.75); color:#fff;
+  padding:1rem 1.5rem; border-radius:8px;
+  font-size:1rem; z-index:3; max-width:300px; text-align:center;
+  animation:fadeIn 1s ease;
+}
+#onboard button { margin-top:.5rem; padding:.4rem .8rem;
+  font-size:.9rem; background:var(--accent-p);
+  border:none; border-radius:4px; cursor:pointer;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* Background chat bubbles */
+.typewriter-wrapper {
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none; z-index:0;
+  opacity:.15;
+}
+.typewriter-chat {
+  position:absolute;
+  background:rgba(0,0,0,.3);
+  color:var(--accent-p);
+  padding:1rem; border-radius:8px;
+  font-size:.9rem; max-width:240px;
+  opacity:0; white-space:pre-wrap;
+  animation:fadeInOut 6s ease-in-out forwards;
+}
+body.theme-gold .typewriter-chat {
+  background:rgba(255,255,255,.2);
+  color:var(--accent-g);
+}
+@keyframes fadeInOut {
+  0%,100%{opacity:0} 10%,90%{opacity:1}
+}
+
+/* Hero animations */
+@keyframes heroFade {
+  from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)}
+}
+@keyframes heroSlide {
+  from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}
+}
+.no-hero-anim .title,
+.no-hero-anim .slogan { animation: none !important; }
+.title {
+  font-family:'Orbitron',sans-serif;
+  font-size:4rem; margin:1rem 0 .5rem;
+  text-align:center; animation:heroFade 1s ease forwards; z-index:1;
+}
+body.theme-purple .title {
+  background:linear-gradient(to right,#a770ef,#cf8bf3,#fdb99b);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+body.theme-gold .title {
+  background:linear-gradient(to right,#d4af37,#eacb84);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.slogan {
+  font-size:1.5rem; font-weight:500;
+  margin-bottom:2rem; text-align:center;
+  animation:heroSlide 1.2s ease-in-out forwards; z-index:1;
+}
+
+.container {
+  width:100%; max-width:800px;
+  background:rgba(255,255,255,.06);
+  border-radius:12px; padding:2.5rem;
+  box-shadow:0 0 16px rgba(0,0,0,.4);
+  z-index:1; margin-bottom:4rem;
+}
+#promptText { font-size:1.2rem; margin-bottom:1rem; }
+textarea, .clarify-container input {
+  width:100%; padding:1.25rem;
+  font-size:1.1rem; border-radius:8px;
+  border:2px solid transparent;
+  background-image:var(--metal-p);
+  background-blend-mode:overlay; background-color:rgba(0,0,0,.1);
+  color:inherit; margin-bottom:1.5rem;
+  resize:none; box-sizing:border-box;
+  font-family:'Exo 2',sans-serif;
+}
+body.theme-gold textarea,
+body.theme-gold .clarify-container input {
+  background-image:var(--metal-g);
+}
+
+button {
+  padding:1rem 2rem; font-size:1.2rem;
+  background-image:var(--metal-p); color:#fff;
+  border:none; border-radius:8px;
+  box-shadow:0 0 12px rgba(0,0,0,.3);
+  cursor:pointer; transition:transform .2s;
+}
+body.theme-gold button {
+  background-image:var(--metal-g); color:var(--text-black);
+}
+button:hover { transform:scale(1.05); }
+
+/* Skeleton loader */
+#loader { display:none; margin:1.5rem 0; width:100%; }
+.skeleton-line {
+  height:12px; margin:8px 0;
+  background:rgba(255,255,255,.2);
+  border-radius:4px;
+  animation: pulseSkeleton 1.5s infinite ease-in-out;
+}
+.skeleton-line.short { width:60%; }
+@keyframes pulseSkeleton {
+  0%,100% { opacity:.4; }
+  50%     { opacity:.8; }
+}
+
+/* Settings panel */
+#settingsBtn {
+  position:fixed; bottom:80px; right:16px;
+  background:rgba(0,0,0,.7); color:#fff;
+  padding:.6rem; border-radius:50%;
+  font-size:1.6rem; cursor:pointer; z-index:2;
+  transition:background .3s;
+}
+#settingsBtn:hover { background:rgba(0,0,0,.9); }
+
+#settingsPanel {
+  position:fixed; bottom:140px; right:16px;
+  width:240px; padding:1rem;
+  background:rgba(20,20,20,.85);
+  backdrop-filter:blur(10px);
+  border-image:var(--metal-p) 1;
+  border-radius:12px;
+  box-shadow:0 0 12px rgba(0,0,0,.6);
+  display:none; z-index:2;
+  font-size:.95rem; color:inherit;
+  cursor: move;
+}
+body.theme-gold #settingsPanel,
+body.theme-gold #settingsPanel h4,
+body.theme-gold #settingsPanel .setting span {
+  color: var(--text-ice);
+}
+#settingsPanel h4 {
+  margin:0 0 .8rem; font-size:1.1rem;
+  text-align:center; font-weight:600;
+  background:linear-gradient(145deg,#9b59b6,#f1c40f);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+/* Responsive modal for small screens */
+@media (max-width: 600px) {
+  #settingsPanel {
+    top:0; left:0; right:0; bottom:0;
+    width:100vw; height:100vh;
+    border-radius:0;
+    padding:2rem;
+  }
+}
+// app.js
+const phrases = [
+  "An AI that writes ad copy for local cafes.",
+  "A tool that builds landing pages from voice notes.",
+  "An assistant that summarizes client feedback.",
+  "An AI that auto-generates slogans for fashion brands.",
+  "A bot that responds to DMs for digital creators.",
+  "An AI that repackages blog posts into carousels.",
+  "A caption creator for streetwear drops.",
+  "Turn review comments into testimonials."
+];
+const API_TIMEOUT = 10000;
+
+// Helpers
+function withTimeout(p, t) {
+  const tm = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Timeout")), t)
+  );
+  return Promise.race([p, tm]);
+}
+function showLoader() { document.getElementById("loader").style.display = "block"; }
+function hideLoader() { document.getElementById("loader").style.display = "none"; }
+function makeHelpers(preEl, filename) {
+  const container = document.createElement("div");
+  container.className = "code-helpers";
+  const copyBtn = document.createElement("button");
+  copyBtn.textContent = "Copy";
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(preEl.textContent);
+    copyBtn.textContent = "Copied!";
+    setTimeout(() => (copyBtn.textContent = "Copy"), 1500);
+  };
+  const dlBtn = document.createElement("button");
+  dlBtn.textContent = "Download";
+  dlBtn.onclick = () => {
+    const blob = new Blob([preEl.textContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+  container.append(copyBtn, dlBtn);
+  preEl.parentNode.insertBefore(container, preEl);
+}
+
+// Chat bubbles
+function spawnChatBubble() {
+  const text = phrases[Math.floor(Math.random() * phrases.length)];
+  const bubble = document.createElement("div");
+  bubble.className = "typewriter-chat";
+  if (Math.random() < 0.5) {
+    bubble.style.left = `${5 + Math.random() * 20}%`;
+  } else {
+    bubble.style.right = `${5 + Math.random() * 20}%`;
+  }
+  bubble.style.top = `${10 + Math.random() * 80}%`;
+  document.getElementById("typewriterWrapper").appendChild(bubble);
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i < text.length) bubble.textContent += text[i++];
+    else {
+      clearInterval(iv);
+      bubble.textContent += ".";
+      setTimeout(() => bubble.remove(), 1000);
+    }
+  }, 40);
+}
+setInterval(() => {
+  for (let j = 0; j < 4 + Math.floor(Math.random() * 2); j++) {
+    spawnChatBubble();
+  }
+}, 3000);
+
+// Settings toggles
+function toggleSettings() {
+  const p = document.getElementById("settingsPanel");
+  p.style.display = p.style.display === "block" ? "none" : "block";
+}
+function toggleTheme() {
+  document.body.classList.toggle("theme-purple");
+  document.body.classList.toggle("theme-gold");
+  localStorage.setItem(
+    "theme",
+    document.body.classList.contains("theme-purple") ? "purple" : "gold"
+  );
+}
+function toggleBackgroundAnimation() {
+  const w = document.getElementById("typewriterWrapper");
+  w.style.display = w.style.display === "none" ? "block" : "none";
+  localStorage.setItem("bgAnim", w.style.display);
+}
+function toggleOnboard() {
+  const onb = document.getElementById("onboard");
+  if (onb) onb.remove();
+  const next = localStorage.getItem("onboard") === "off" ? "on" : "off";
+  localStorage.setItem("onboard", next);
+}
+function toggleBtnAnim() {
+  const btn = document.getElementById("actionBtn");
+  btn.classList.toggle("anim-button");
+  const next = btn.classList.contains("anim-button") ? "on" : "off";
+  localStorage.setItem("btnAnim", next);
+}
+
+// Drag settings panel
+let isDragging = false, offset = {};
+const panel = document.getElementById("settingsPanel");
+panel.addEventListener("mousedown", e => {
+  isDragging = true;
+  offset.x = e.clientX - panel.offsetLeft;
+  offset.y = e.clientY - panel.offsetTop;
+});
+document.addEventListener("mousemove", e => {
+  if (!isDragging) return;
+  panel.style.left = `${e.clientX - offset.x}px`;
+  panel.style.top  = `${e.clientY - offset.y}px`;
+});
+document.addEventListener("mouseup", () => isDragging = false);
+
+// Persist & restore settings
+function loadSettings() {
+  if (localStorage.getItem("theme") === "gold") toggleTheme();
+  if (localStorage.getItem("bgAnim") === "none") toggleBackgroundAnimation();
+  if (localStorage.getItem("onboard") === "off") {
+    document.getElementById("onboard")?.remove();
+  }
+  if (localStorage.getItem("btnAnim") === "on") toggleBtnAnim();
+}
+
+// Idea → refine → generate
+async function submitIdea() {
+  const original = document.getElementById("ideaInput").value.trim();
+  if (!original) return;
+  showLoader();
+  document.getElementById("responseArea").innerHTML = "";
+  document.getElementById("clarifySection").style.display = "none";
+  document.getElementById("actionBtn").style.display = "none";
+  try {
+    const res = await withTimeout(
+      fetch("https://foundrly-backend-1.onrender.com/api/refine-idea", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idea: original })
+      }),
+      API_TIMEOUT
+    );
+    const data = await res.json();
+    hideLoader();
+    if (data.status === "clarify") {
+      const sec = document.getElementById("clarifySection");
+      sec.innerHTML = "<h3>Let’s clarify:</h3>";
+      data.questions.forEach((q,i) => {
+        const inp = document.createElement("input");
+        inp.placeholder = q; inp.id = `ans_${i}`;
+        sec.appendChild(inp);
+      });
+      const btn = document.createElement("button");
+      btn.textContent = "Submit Answers";
+      btn.onclick = submitAnswers;
+      sec.appendChild(btn);
+      sec.style.display = "block";
+    } else if (data.status === "ready") {
+      generateCode(original);
+    } else {
+      document.getElementById("responseArea").textContent = "Unexpected response.";
+    }
+  } catch {
+    hideLoader();
+    document.getElementById("responseArea").textContent =
+      "🛑 Whoops, our AI took a coffee break! Mind trying again?";
+  }
+}
+
+async function submitAnswers() {
+  const answers = Array.from(
+    document.querySelectorAll("#clarifySection input")
+  ).map(i => i.value.trim());
+  const original = document.getElementById("ideaInput").value.trim();
+  document.getElementById("clarifySection").style.display = "none";
+  generateCode(original + ". " + answers.join(" "));
+}
+
+async function generateCode(idea) {
+  showLoader();
+  try {
+    const res = await withTimeout(
+      fetch("https://foundrly-backend-1.onrender.com/api/generate-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          idea,
+          target_user: "creators",
+          platform: "web app",
+          features: ["text generation","download"]
+        })
+      }),
+      API_TIMEOUT
+    );
+    const data = await res.json();
+    hideLoader();
+    const area = document.getElementById("responseArea");
+    area.innerHTML = `
+      <h3>Tool Summary:</h3><pre id="spec"></pre>
+      <h3>Generated Code:</h3><pre id="code"></pre>
+      <h3>Setup Instructions:</h3><pre id="inst"></pre>`;
+    document.getElementById("spec").textContent = data.spec;
+    document.getElementById("code").textContent = data.code;
+    document.getElementById("inst").textContent = data.instructions;
+    makeHelpers(document.getElementById("spec"), "spec.txt");
+    makeHelpers(document.getElementById("code"), "code.js");
+    makeHelpers(document.getElementById("inst"), "instructions.txt");
+    document.getElementById("actionBtn").style.display = "block";
+  } catch {
+    hideLoader();
+    alert("🛑 Whoops, our AI took a coffee break! Mind trying again?");
+  }
+}
+
+// Initialize
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("actionBtn").addEventListener("click", submitIdea);
+  document.getElementById("settingsBtn").addEventListener("click", toggleSettings);
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("bgAnimToggle").addEventListener("click", toggleBackgroundAnimation);
+  document.getElementById("onboardDismiss").addEventListener("click", () => {
+    document.getElementById("onboard").remove();
+    localStorage.setItem("onboard","off");
+  });
+  document.getElementById("onboardToggle").addEventListener("click", toggleOnboard);
+  document.getElementById("btnAnimToggle").addEventListener("click", toggleBtnAnim);
+  document.getElementById("restoreDefaults").addEventListener("click", () => {
+    localStorage.clear();
+    location.reload();
+  });
+  loadSettings();
+  setTimeout(() => document.getElementById("onboard")?.remove(), 6000);
+});
