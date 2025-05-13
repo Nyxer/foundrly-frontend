@@ -152,6 +152,15 @@
       background:rgba(241,196,15,.2);
     }
 
+    /* Button pulse animation */
+    @keyframes pulse {
+      0%,100% { transform:scale(1); }
+      50%     { transform:scale(1.05); }
+    }
+    button.anim-button {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
     /* Techy settings panel */
     #settingsBtn {
       position:fixed; bottom:80px; right:16px;
@@ -164,9 +173,9 @@
 
     #settingsPanel {
       position:fixed; bottom:140px; right:16px;
-      width:220px; padding:1rem;
+      width:240px; padding:1rem;
       background:rgba(20,20,20,.85);
-      border:2px solid transparent;
+      backdrop-filter:blur(10px);
       border-image:var(--metal-p) 1;
       border-radius:12px;
       box-shadow:0 0 12px rgba(0,0,0,.6);
@@ -176,6 +185,8 @@
     #settingsPanel h4 {
       margin:0 0 .8rem; font-size:1.1rem;
       text-align:center; font-weight:600;
+      background:linear-gradient(145deg,#9b59b6,#f1c40f);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
     }
     .setting {
       display:flex; justify-content:space-between;
@@ -239,16 +250,16 @@
       <label class="toggle"><input type="checkbox" id="themeToggle" onclick="toggleTheme()"><span class="slider"></span></label>
     </div>
     <div class="setting">
-      <span>Bg Animations</span>
+      <span>Chat Bubbles</span>
       <label class="toggle"><input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()"><span class="slider"></span></label>
     </div>
     <div class="setting">
-      <span>Hero Animations</span>
-      <label class="toggle"><input type="checkbox" id="heroAnimToggle" onclick="toggleHeroAnimation()"><span class="slider"></span></label>
+      <span>Onboarding Tips</span>
+      <label class="toggle"><input type="checkbox" id="onboardToggle" onclick="toggleOnboard()"><span class="slider"></span></label>
     </div>
     <div class="setting">
-      <span>Parallax</span>
-      <label class="toggle"><input type="checkbox" id="parallaxToggle" onclick="toggleParallax()"><span class="slider"></span></label>
+      <span>Button Animation</span>
+      <label class="toggle"><input type="checkbox" id="btnAnimToggle" onclick="toggleBtnAnim()"><span class="slider"></span></label>
     </div>
   </div>
   <script>
@@ -262,84 +273,101 @@
       "A caption creator for streetwear drops.",
       "Turn review comments into testimonials."
     ];
-    let typingSpeed = 'normal', refineQuestions = [], originalIdea = '';
     const API_TIMEOUT = 10000;
 
+    // Spawn 4–5 bubbles on the sides only
     function spawnBubbles() {
-      const count = 4 + Math.floor(Math.random()*2);
-      for (let i=0; i<count; i++) spawnChatBubble();
+      const count = 4 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < count; i++) spawnChatBubble();
     }
     function spawnChatBubble() {
-      const text = phrases[Math.floor(Math.random()*phrases.length)];
+      const text = phrases[Math.floor(Math.random() * phrases.length)];
       const bubble = document.createElement('div');
       bubble.className = 'typewriter-chat';
-      const side = Math.random()<0.5 ? 'left' : 'right';
-      bubble.style[side] = (side==='left' ? 10+Math.random()*10 : 80+Math.random()*10) + '%';
-      bubble.style.top   = (10+Math.random()*80) + '%';
+      const isLeft = Math.random() < 0.5;
+      if (isLeft) {
+        bubble.style.left = `${5 + Math.random() * 20}%`;
+      } else {
+        bubble.style.right = `${5 + Math.random() * 20}%`;
+      }
+      bubble.style.top = `${10 + Math.random() * 80}%`;
       document.getElementById('typewriterWrapper').appendChild(bubble);
-      let i=0;
-      const iv = setInterval(()=>{
-        if(i<text.length) bubble.textContent += text[i++];
-        else { clearInterval(iv); bubble.textContent+='.'; setTimeout(()=>bubble.remove(),1000); }
-      },40);
+      let i = 0;
+      const iv = setInterval(() => {
+        if (i < text.length) bubble.textContent += text[i++];
+        else {
+          clearInterval(iv);
+          bubble.textContent += '.';
+          setTimeout(() => bubble.remove(), 1000);
+        }
+      }, 40);
     }
-    setInterval(spawnBubbles,3000);
+    setInterval(spawnBubbles, 3000);
 
-    function toggleSettings(){
+    // Settings panel toggles
+    function toggleSettings() {
       const p = document.getElementById('settingsPanel');
-      p.style.display = p.style.display==='block' ? 'none' : 'block';
+      p.style.display = p.style.display === 'block' ? 'none' : 'block';
     }
-    function toggleTheme(){
+    function toggleTheme() {
       document.body.classList.toggle('theme-purple');
       document.body.classList.toggle('theme-gold');
       localStorage.setItem('theme',
-        document.body.classList.contains('theme-purple')?'purple':'gold');
+        document.body.classList.contains('theme-purple') ? 'purple' : 'gold'
+      );
     }
-    function toggleBackgroundAnimation(){
+    function toggleBackgroundAnimation() {
       const w = document.getElementById('typewriterWrapper');
-      w.style.display = w.style.display==='none' ? 'block' : 'none';
+      w.style.display = w.style.display === 'none' ? 'block' : 'none';
       localStorage.setItem('bgAnim', w.style.display);
     }
-    function toggleHeroAnimation(){
-      document.body.classList.toggle('no-hero-anim');
-      localStorage.setItem('heroAnim',
-        document.body.classList.contains('no-hero-anim')?'off':'on');
+    function toggleOnboard() {
+      const onb = document.getElementById('onboard');
+      if (onb) onb.remove();
+      const next = localStorage.getItem('onboard') === 'off' ? 'on' : 'off';
+      localStorage.setItem('onboard', next);
     }
-    function toggleParallax(){
-      document.body.classList.toggle('no-parallax');
-      localStorage.setItem('parallax',
-        document.body.classList.contains('no-parallax')?'off':'on');
+    function toggleBtnAnim() {
+      const btn = document.getElementById('actionBtn');
+      btn.classList.toggle('anim-button');
+      const next = btn.classList.contains('anim-button') ? 'on' : 'off';
+      localStorage.setItem('btnAnim', next);
     }
 
+    // Persist settings on load
     window.onload = () => {
-      if(localStorage.getItem('theme')==='gold') toggleTheme();
-      if(localStorage.getItem('bgAnim')==='none') toggleBackgroundAnimation();
-      if(localStorage.getItem('heroAnim')==='off') toggleHeroAnimation();
-      if(localStorage.getItem('parallax')==='off') toggleParallax();
+      if (localStorage.getItem('theme') === 'gold') toggleTheme();
+      if (localStorage.getItem('bgAnim') === 'none') toggleBackgroundAnimation();
+      if (localStorage.getItem('onboard') === 'off' && document.getElementById('onboard')) {
+        document.getElementById('onboard').remove();
+      }
+      if (localStorage.getItem('btnAnim') === 'on') toggleBtnAnim();
       setTimeout(() => document.getElementById('onboard')?.remove(), 6000);
     };
 
-    function withTimeout(p, t){
-      const tm = new Promise((_, r)=> setTimeout(()=>r(new Error('Timeout')), t));
+    // Helper to race API + timeout
+    function withTimeout(p, t) {
+      const tm = new Promise((_, r) => setTimeout(() => r(new Error('Timeout')), t));
       return Promise.race([p, tm]);
     }
 
-    async function submitIdea(){
-      originalIdea = document.getElementById('ideaInput').value.trim();
+    // Submit idea → refine or generate code
+    async function submitIdea() {
+      const originalIdea = document.getElementById('ideaInput').value.trim();
       if (!originalIdea) return;
       document.getElementById('loader').style.display = 'block';
       document.getElementById('responseArea').innerHTML = '';
       document.getElementById('clarifySection').style.display = 'none';
       document.getElementById('actionBtn').style.display = 'none';
       try {
-        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/refine-idea',{
-          method:'POST', headers:{'Content-Type':'application/json'},
+        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/refine-idea', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({ idea: originalIdea })
         }), API_TIMEOUT);
         const data = await res.json();
         document.getElementById('loader').style.display = 'none';
         if (data.status === 'clarify') {
-          refineQuestions = data.questions;
+          const refineQuestions = data.questions;
           const sec = document.getElementById('clarifySection');
           sec.innerHTML = '<h3>Let’s clarify:</h3>';
           refineQuestions.forEach((q,i) => {
@@ -357,21 +385,26 @@
         }
       } catch (e) {
         document.getElementById('loader').style.display = 'none';
-        document.getElementById('responseArea').textContent = '⚠️ Request timed out. Please try again shortly.';
+        document.getElementById('responseArea').textContent =
+          "🛑 Whoops, our AI took a coffee break! Mind trying again?";
       }
     }
 
-    async function submitAnswers(){
-      const answers = refineQuestions.map((_,i) => document.getElementById(`ans_${i}`).value.trim());
+    // Submit refined answers
+    async function submitAnswers() {
+      const refineQuestions = Array.from(document.querySelectorAll('#clarifySection input'));
+      const answers = refineQuestions.map(inp => inp.value.trim());
+      const originalIdea = document.getElementById('ideaInput').value.trim();
       const refined = originalIdea + '. ' + answers.join(' ');
       document.getElementById('clarifySection').style.display = 'none';
       generateCode(refined);
     }
 
-    async function generateCode(idea){
+    // Generate code from idea
+    async function generateCode(idea) {
       document.getElementById('loader').style.display = 'block';
       try {
-        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/generate-code',{
+        const res = await withTimeout(fetch('https://foundrly-backend-1.onrender.com/api/generate-code', {
           method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
             idea,
@@ -390,7 +423,8 @@
         document.getElementById('promptText').textContent = 'Describe your AI business idea:';
       } catch (e) {
         document.getElementById('loader').style.display = 'none';
-        document.getElementById('responseArea').textContent = '⚠️ Generation timeout. Please try again.';
+        document.getElementById('responseArea').textContent =
+          "🛑 Whoops, our AI took a coffee break! Mind trying again?";
       }
     }
   </script>
