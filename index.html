@@ -424,4 +424,12 @@
     }
 
     window.onload = () => {
-      if (localStorage.getItem("theme") === "gold
+      if (localStorage.getItem("theme") === "gold") toggleTheme();
+      if (localStorage.getItem("bgAnim") === "none") toggleBackgroundAnimation();
+      if (localStorage.getItem("typingSpeed") === "fast") toggleTypingSpeed();
+      if (localStorage.getItem("glow") === "off") toggleGlow();
+    };
+  </script>
+
+</body>
+</html>
