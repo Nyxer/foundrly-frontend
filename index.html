@@ -13,8 +13,8 @@
       --text-dark: #1a1a1a;
       --accent-purple: #9b59b6;
       --accent-gold: #f1c40f;
-      --accent-hover-purple: #732d91;
-      --accent-hover-gold: #d1a70a;
+      --metallic-purple: linear-gradient(145deg, #5e1aa2, #9b59b6);
+      --metallic-gold: linear-gradient(145deg, #f1c40f, #d4af37);
     }
     body.theme-purple { background: var(--bg-purple); color: var(--text-light); }
     body.theme-gold { background: var(--bg-gold); color: var(--text-dark); }
@@ -30,21 +30,33 @@
       overflow: hidden;
       transition: background 0.5s ease, color 0.5s ease;
     }
-    .background-codes {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
-      overflow: hidden; pointer-events: none;
+    .typewriter-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
     }
-    .code-float {
+    .typewriter-chat {
       position: absolute;
-      color: rgba(255,255,255,0.3);
-      font-size: 14px;
-      white-space: pre;
-      animation: floatCode 20s linear infinite;
+      background: rgba(0, 0, 0, 0.6);
+      color: #f1c40f;
+      padding: 1rem;
+      border-radius: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      max-width: 320px;
+      opacity: 0;
+      animation: fadeInOut 6s ease-in-out forwards;
+      white-space: pre-wrap;
     }
-    @keyframes floatCode {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      25% { opacity: 1; }
-      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; }
     }
     .title {
       font-size: 3rem;
@@ -73,7 +85,7 @@
       z-index: 2;
     }
     .container {
-      max-width: 720px;
+      max-width: 640px;
       width: 100%;
       background: rgba(255,255,255,0.06);
       border-radius: 16px;
@@ -81,17 +93,27 @@
       box-shadow: 0 0 16px rgba(0,0,0,0.5);
       z-index: 1;
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     textarea {
       width: 100%;
       height: 140px;
       padding: 1rem;
       border-radius: 10px;
-      background: #111;
-      border: 1px solid #444;
-      color: #00ff88;
+      background: #1a1a1a;
+      background-image: var(--metallic-purple);
+      border: 1px solid #555;
+      color: #f1c40f;
       font-size: 0.95rem;
       font-family: 'Fira Code', monospace;
+      resize: none;
+      transition: color 0.3s ease;
+    }
+    body.theme-gold textarea {
+      background-image: var(--metallic-gold);
+      color: #9b59b6;
     }
     pre {
       background: #111;
@@ -114,19 +136,33 @@
     }
     button {
       margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 2rem;
       font-size: 1rem;
       font-weight: bold;
+      font-family: 'Fira Code', monospace;
+      background-image: var(--metallic-purple);
       color: #fff;
-      background-color: var(--accent-purple);
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s ease, transform 0.2s ease;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
-    body.theme-gold button { background-color: var(--accent-gold); color: #1a1a1a; }
-    body.theme-purple button:hover { background-color: var(--accent-hover-purple); }
-    body.theme-gold button:hover { background-color: var(--accent-hover-gold); }
+    body.theme-gold button {
+      background-image: var(--metallic-gold);
+      color: #1a1a1a;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #loader {
+      display: none;
+      margin-top: 1rem;
+      text-align: center;
+    }
     #themeToggleBtn {
       position: fixed;
       bottom: 16px;
@@ -143,7 +179,7 @@
   </style>
 </head>
 <body class="theme-purple">
-  <div class="background-codes" id="backgroundCodes"></div>
+  <div class="typewriter-wrapper" id="typewriterWrapper"></div>
   <div class="title">Foundrly</div>
   <div class="slogan">Your Cofounder Doesn’t Have to Be Human.</div>
   <div class="container">
@@ -155,7 +191,43 @@
     <div class="response-area" id="responseArea"></div>
   </div>
   <button id="themeToggleBtn" onclick="toggleTheme()">Toggle Theme</button>
+
   <script>
+    const phrases = [
+      "An AI that writes ad copy for local cafes.",
+      "A tool that builds landing pages from voice notes.",
+      "An assistant that summarizes client feedback.",
+      "An AI that auto-generates slogans for fashion brands.",
+      "A bot that responds to DMs for digital creators.",
+      "An AI that repackages blog posts into carousels.",
+      "A caption creator for streetwear drops.",
+      "Turn review comments into testimonials.",
+      "Generate DM templates for influencer collabs.",
+      "From idea to MVP, instantly."
+    ];
+    function spawnChatBubble(text) {
+      const bubble = document.createElement("div");
+      bubble.className = "typewriter-chat";
+      bubble.style.top = `${Math.random() * 80 + 5}%`;
+      bubble.style.left = `${Math.random() * 80 + 5}%`;
+      document.getElementById("typewriterWrapper").appendChild(bubble);
+      let index = 0;
+      const typingInterval = setInterval(() => {
+        if (index < text.length) {
+          bubble.textContent += text[index];
+          index++;
+        } else {
+          bubble.textContent += ".";
+          clearInterval(typingInterval);
+          setTimeout(() => bubble.remove(), 1000);
+        }
+      }, 45);
+    }
+    setInterval(() => {
+      const sample = phrases[Math.floor(Math.random() * phrases.length)];
+      spawnChatBubble(sample);
+    }, 2500);
+
     let followUpQuestions = [];
     function toggleTheme() {
       document.body.classList.toggle("theme-purple");
@@ -232,50 +304,6 @@
         console.error(err);
         loader.style.display = "none";
         responseArea.innerHTML = "⚠️ Failed to generate tool.";
-      }
-    }
-    window.onload = () => {
-      const bg = document.getElementById("backgroundCodes");
-      const snippets = [
-        "An AI that generates ad headlines for coffee shops",
-        "An AI that turns blog posts into carousels",
-        "An AI that writes product descriptions for Etsy sellers",
-        "An AI that creates captions for real estate listings",
-        "An AI that drafts Instagram bios for creators",
-        "An AI that generates tweet threads from news articles",
-        "An AI that helps barbers schedule posts",
-        "An AI that summarizes podcast episodes",
-        "An AI that rewrites eBay product titles",
-        "An AI that generates hashtags for fitness influencers",
-        "An AI that writes reviews for local service businesses",
-        "An AI that converts videos into blog summaries",
-        "An AI that helps barbershop clients book appointments",
-        "An AI that turns quotes into aesthetic Instagram posts",
-        "An AI that designs portfolio website landing pages",
-        "An AI that generates descriptions for YouTube shorts",
-        "An AI that converts TikToks into email newsletters",
-        "An AI that makes product page bullet points",
-        "An AI that helps tattoo artists generate post ideas",
-        "An AI that summarizes Zoom meetings into action items",
-        "An AI that generates testimonials for Shopify stores",
-        "An AI that makes Facebook ad copies for pet brands",
-        "An AI that writes DMs to influencers to pitch collabs",
-        "An AI that makes slogan ideas for skincare startups",
-        "An AI that helps streetwear brands write product drops",
-        "An AI that helps coaches turn sessions into email tips",
-        "An AI that builds landing pages for food truck menus",
-        "An AI that writes outreach emails for freelancers",
-        "An AI that generates CTAs for SaaS homepages",
-        "An AI that remixes customer reviews into ad copy"
-      ];
-      for (let i = 0; i < 18; i++) {
-        const el = document.createElement("div");
-        el.className = "code-float";
-        el.style.left = Math.random() * 100 + "%";
-        el.style.top = Math.random() * 100 + "%";
-        el.style.animationDuration = 10 + Math.random() * 10 + "s";
-        el.innerText = snippets[Math.floor(Math.random() * snippets.length)];
-        bg.appendChild(el);
       }
     }
   </script>
