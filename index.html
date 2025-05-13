@@ -10,15 +10,56 @@
     :root {
       --bg-purple: linear-gradient(to bottom right, #2d0059, #5e1aa2);
       --bg-gold:   linear-gradient(to bottom right, #5f4200, #d4af37);
-      --text-ice:  #d3e4f1;
-      --text-black:#222222;
+      --text-ice:  linear-gradient(145deg, #e0f2ff, #ffffff);
+      --text-black:linear-gradient(145deg, #222222, #444444);
+      --text-ice-solid: #d3e4f1;
+      --text-black-solid:#222222;
       --accent-p:  #9b59b6;
       --accent-g:  #f1c40f;
       --metal-p:   linear-gradient(145deg,#5e1aa2,#9b59b6);
       --metal-g:   linear-gradient(145deg,#f1c40f,#d4af37);
     }
-    body.theme-purple { background: var(--bg-purple); color: var(--text-ice); }
-    body.theme-gold   { background: var(--bg-gold);   color: var(--text-black); }
+    body.theme-purple { 
+      background: var(--bg-purple); 
+      color: var(--text-ice-solid);
+    }
+    body.theme-purple * {
+      background: var(--text-ice);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
+      text-shadow: 0 0 2px rgba(255,255,255,0.1);
+    }
+    body.theme-gold { 
+      background: var(--bg-gold);
+      color: var(--text-black-solid);
+    }
+    body.theme-gold * {
+      background: var(--text-black);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
+      text-shadow: 0 0 2px rgba(0,0,0,0.2);
+    }
+
+    /* Exclude elements that shouldn't have gradient text */
+    body.theme-purple button,
+    body.theme-gold button,
+    body.theme-purple textarea,
+    body.theme-gold textarea,
+    body.theme-purple input,
+    body.theme-gold input,
+    body.theme-purple pre,
+    body.theme-gold pre {
+      background: none !important;
+      -webkit-text-fill-color: initial !important;
+      text-fill-color: initial !important;
+      color: inherit !important;
+      text-shadow: none !important;
+    }
+
     body {
       font-family: 'Exo 2', sans-serif;
       margin:0; padding:4rem;
@@ -109,9 +150,32 @@
       border-radius:12px; padding:2.5rem;
       box-shadow:0 0 16px rgba(0,0,0,.4);
       z-index:1; margin-bottom:4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .container:after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      right: -50%;
+      bottom: -50%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.05) 0%,
+        rgba(255,255,255,0.15) 50%,
+        rgba(255,255,255,0.05) 100%
+      );
+      transform: rotate(30deg);
+      z-index: -1;
+      opacity: 0.5;
     }
 
-    #promptText { font-size:1.2rem; margin-bottom:1rem; }
+    #promptText { 
+      font-size:1.2rem; 
+      margin-bottom:1rem;
+      font-weight: 600;
+    }
     textarea, .clarify-container input {
       width:100%; padding:1.25rem;
       font-size:1.1rem; border-radius:8px;
@@ -121,10 +185,21 @@
       color:inherit; margin-bottom:1.5rem;
       resize:none; box-sizing:border-box;
       font-family:'Exo 2',sans-serif;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    textarea:focus, .clarify-container input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(155, 89, 182, 0.5);
     }
     body.theme-gold textarea,
     body.theme-gold .clarify-container input {
       background-image:var(--metal-g);
+    }
+    body.theme-gold textarea:focus,
+    body.theme-gold .clarify-container input:focus {
+      box-shadow: 0 0 0 2px rgba(241, 196, 15, 0.5);
     }
 
     button {
@@ -133,11 +208,41 @@
       border:none; border-radius:8px;
       box-shadow:0 0 12px rgba(0,0,0,.3);
       cursor:pointer; transition:transform .2s;
+      position: relative;
+      overflow: hidden;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    button:hover { 
+      transform:scale(1.05);
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+    button:after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      right: -50%;
+      bottom: -50%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.1) 0%,
+        rgba(255,255,255,0.3) 50%,
+        rgba(255,255,255,0.1) 100%
+      );
+      transform: rotate(30deg);
+      z-index: 1;
+      pointer-events: none;
+      animation: shimmer 3s infinite linear;
     }
     body.theme-gold button {
-      background-image:var(--metal-g); color:var(--text-black);
+      background-image:var(--metal-g); color:var(--text-black-solid);
     }
-    button:hover { transform:scale(1.05); }
+
+    @keyframes shimmer {
+      0% { transform: rotate(30deg) translateX(-100%); }
+      100% { transform: rotate(30deg) translateX(100%); }
+    }
 
     #loader {
       display:none; margin:1.5rem 0; font-size:1.3rem; text-align:center;
@@ -147,6 +252,23 @@
       padding:1rem; border-radius:8px;
       white-space:pre-wrap; font-size:1.1rem;
       color:inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    #responseArea pre:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.05) 0%,
+        rgba(255,255,255,0.15) 50%,
+        rgba(255,255,255,0.05) 100%
+      );
+      z-index: -1;
     }
     body.theme-gold #responseArea pre {
       background:rgba(241,196,15,.2);
@@ -172,6 +294,9 @@
       box-shadow:0 0 12px rgba(0,0,0,.6);
       display:none; z-index:2;
       font-size:.95rem; color:inherit;
+    }
+    body.theme-gold #settingsPanel {
+      border-image:var(--metal-g) 1;
     }
     #settingsPanel h4 {
       margin:0 0 .8rem; font-size:1.1rem;
@@ -203,6 +328,9 @@
     input:checked + .slider {
       background:var(--accent-p);
     }
+    body.theme-gold input:checked + .slider {
+      background:var(--accent-g);
+    }
     input:checked + .slider:before {
       transform:translateX(26px);
     }
@@ -213,14 +341,14 @@
   <div id="onboard">
     Welcome to Foundrly!<br>
     1️⃣ Describe your AI idea.<br>
-    2️⃣ Click “Build It.”<br>
+    2️⃣ Click "Build It."<br>
     3️⃣ Tweak settings ⚙️ as you like.<br>
     <button onclick="this.parentNode.remove()">Got it!</button>
   </div>
 
   <div class="typewriter-wrapper" id="typewriterWrapper"></div>
   <div class="title">Foundrly</div>
-  <div class="slogan">Your Cofounder Doesn’t Have to Be Human.</div>
+  <div class="slogan">Your Cofounder Doesn't Have to Be Human.</div>
 
   <div class="container">
     <div id="promptText">Describe your AI business idea:</div>
@@ -341,7 +469,7 @@
         if (data.status === 'clarify') {
           refineQuestions = data.questions;
           const sec = document.getElementById('clarifySection');
-          sec.innerHTML = '<h3>Let’s clarify:</h3>';
+          sec.innerHTML = '<h3>Let's clarify:</h3>';
           refineQuestions.forEach((q,i) => {
             const inp = document.createElement('input');
             inp.placeholder = q; inp.id = `ans_${i}`;
