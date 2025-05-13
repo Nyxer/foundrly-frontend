@@ -51,8 +51,8 @@
 
     .code-float {
       position: absolute;
-      color: rgba(255,255,255,0.08);
-      font-size: 14px;
+      color: rgba(255,255,255,0.2);
+      font-size: 13px;
       white-space: pre;
       animation: floatCode 20s linear infinite;
     }
@@ -63,7 +63,7 @@
         opacity: 0;
       }
       25% {
-        opacity: 1;
+        opacity: 0.6;
       }
       100% {
         transform: translateY(-120vh) rotate(360deg);
@@ -71,14 +71,25 @@
       }
     }
 
-    .logo {
-      text-align: center;
+    .title {
+      font-size: 3rem;
+      font-weight: 700;
       margin-bottom: 0.5rem;
+      text-align: center;
+      animation: fadeIn 1s ease;
       z-index: 2;
     }
 
-    .logo img {
-      max-height: 80px;
+    body.theme-purple .title {
+      background: linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    body.theme-gold .title {
+      background: linear-gradient(to right, #d4af37, #eacb84);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .slogan {
@@ -97,7 +108,7 @@
       border-radius: 16px;
       padding: 2rem;
       box-shadow: 0 0 16px rgba(0,0,0,0.5);
-      z-index: 2;
+      z-index: 1;
     }
 
     textarea {
@@ -125,6 +136,7 @@
 
     body.theme-gold button {
       background-color: var(--accent-gold);
+      color: #1a1a1a;
     }
 
     body.theme-purple button:hover {
@@ -162,6 +174,15 @@
       margin-top: 1rem;
     }
 
+    #themeToggleBtn {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -171,9 +192,7 @@
 <body class="theme-purple">
   <div class="background-codes" id="backgroundCodes"></div>
 
-  <div class="logo">
-    <img src="https://raw.githubusercontent.com/nyxer/foundrly-frontend/main/logo.png" alt="Foundrly Logo" />
-  </div>
+  <div class="title">Foundrly</div>
   <div class="slogan">Build your idea. We'll code the future. 💡</div>
 
   <div class="container">
@@ -183,10 +202,9 @@
     <div id="questionsSection" class="questions-container" style="display: none;"></div>
     <button id="submitAnswersBtn" style="display:none" onclick="submitAnswers()">Submit Answers</button>
     <div class="response-area" id="responseArea"></div>
-    <div style="margin-top: 1.5rem; text-align: center;">
-      <button onclick="toggleTheme()">Toggle Theme</button>
-    </div>
   </div>
+
+  <button id="themeToggleBtn" onclick="toggleTheme()">Toggle Theme</button>
 
   <script>
     let followUpQuestions = [];
@@ -294,12 +312,12 @@
         `const startup = createStartupIdea(userInput);`
       ];
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 12; i++) {
         const el = document.createElement("div");
         el.className = "code-float";
         el.style.left = Math.random() * 100 + "%";
         el.style.top = Math.random() * 100 + "%";
-        el.style.animationDuration = 12 + Math.random() * 12 + "s";
+        el.style.animationDuration = 14 + Math.random() * 14 + "s";
         el.innerText = snippets[Math.floor(Math.random() * snippets.length)];
         bg.appendChild(el);
       }
