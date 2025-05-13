@@ -35,15 +35,59 @@
       flex-direction: column;
       align-items: center;
       transition: background 0.5s ease, color 0.5s ease;
+      overflow: hidden;
+    }
+
+    .background-codes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .code-float {
+      position: absolute;
+      color: rgba(255,255,255,0.08);
+      font-size: 14px;
+      white-space: pre;
+      animation: floatCode 20s linear infinite;
+    }
+
+    @keyframes floatCode {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      25% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     .logo {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.5rem;
+      z-index: 2;
     }
 
     .logo img {
       max-height: 80px;
+    }
+
+    .slogan {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 1.2s ease-in-out;
+      text-align: center;
+      z-index: 2;
     }
 
     .container {
@@ -53,6 +97,7 @@
       border-radius: 16px;
       padding: 2rem;
       box-shadow: 0 0 16px rgba(0,0,0,0.5);
+      z-index: 2;
     }
 
     textarea {
@@ -116,12 +161,21 @@
       display: none;
       margin-top: 1rem;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body class="theme-purple">
+  <div class="background-codes" id="backgroundCodes"></div>
+
   <div class="logo">
-    <img src="https://raw.githubusercontent.com/Nyxer/foundrly-frontend/refs/heads/main/ChatGPT%20Image%20May%2012%2C%202025%2C%2008_19_10%20PM.png" />
+    <img src="https://raw.githubusercontent.com/nyxer/foundrly-frontend/main/logo.png" alt="Foundrly Logo" />
   </div>
+  <div class="slogan">Build your idea. We'll code the future. 💡</div>
+
   <div class="container">
     <textarea id="ideaInput" placeholder="e.g. An AI that generates Instagram captions for stylists..."></textarea>
     <button onclick="submitIdea()">Build It</button>
@@ -226,6 +280,28 @@
         console.error(err);
         loader.style.display = "none";
         responseArea.innerHTML = "⚠️ Failed to generate tool.";
+      }
+    }
+
+    // generate floating code snippets
+    window.onload = () => {
+      const bg = document.getElementById("backgroundCodes");
+      const snippets = [
+        `function hello() {\n  console.log("Hello Foundrly!");\n}`,
+        `const idea = "AI for tattoo shops";`,
+        `app.post('/api/launch', async (req, res) => { ... });`,
+        `if (idea.status === "ready") generateCode();`,
+        `const startup = createStartupIdea(userInput);`
+      ];
+
+      for (let i = 0; i < 10; i++) {
+        const el = document.createElement("div");
+        el.className = "code-float";
+        el.style.left = Math.random() * 100 + "%";
+        el.style.top = Math.random() * 100 + "%";
+        el.style.animationDuration = 12 + Math.random() * 12 + "s";
+        el.innerText = snippets[Math.floor(Math.random() * snippets.length)];
+        bg.appendChild(el);
       }
     }
   </script>
