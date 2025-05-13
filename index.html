@@ -52,6 +52,10 @@
       animation: fadeInOut 6s ease-in-out forwards;
       white-space: pre-wrap;
     }
+    body.theme-gold .typewriter-chat {
+      background: rgba(255, 255, 255, 0.2);
+      color: #9b59b6;
+    }
     @keyframes fadeInOut {
       0% { opacity: 0; }
       10% { opacity: 1; }
@@ -205,24 +209,33 @@
       "Generate DM templates for influencer collabs.",
       "From idea to MVP, instantly."
     ];
+
     function spawnChatBubble(text) {
       const bubble = document.createElement("div");
       bubble.className = "typewriter-chat";
-      bubble.style.top = `${Math.random() * 80 + 5}%`;
-      bubble.style.left = `${Math.random() * 80 + 5}%`;
+      let leftOffset = Math.random() * 30;
+      if (Math.random() > 0.5) {
+        bubble.style.left = `${leftOffset}%`;
+      } else {
+        bubble.style.right = `${leftOffset}%`;
+        bubble.style.left = "";
+      }
+      bubble.style.top = `${Math.random() * 90}%`;
       document.getElementById("typewriterWrapper").appendChild(bubble);
+
       let index = 0;
       const typingInterval = setInterval(() => {
         if (index < text.length) {
           bubble.textContent += text[index];
           index++;
         } else {
-          bubble.textContent += ".";
           clearInterval(typingInterval);
+          bubble.textContent += ".";
           setTimeout(() => bubble.remove(), 1000);
         }
       }, 45);
     }
+
     setInterval(() => {
       const sample = phrases[Math.floor(Math.random() * phrases.length)];
       spawnChatBubble(sample);
