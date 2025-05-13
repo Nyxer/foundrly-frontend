@@ -17,7 +17,7 @@
       --metallic-gold: linear-gradient(145deg, #f1c40f, #d4af37);
     }
     body.theme-purple { background: var(--bg-purple); color: var(--text-light); }
-    body.theme-gold { background: var(--bg-gold); color: var(--text-dark); }
+    body.theme-gold   { background: var(--bg-gold);  color: var(--text-dark); }
     body {
       font-family: 'Fira Code', monospace;
       margin: 0;
@@ -25,195 +25,182 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
-      overflow: hidden;
+      overflow: auto;
       transition: background 0.5s ease, color 0.5s ease;
     }
+
     .typewriter-wrapper {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 0;
     }
     .typewriter-chat {
       position: absolute;
-      background: rgba(0, 0, 0, 0.6);
-      color: #9b59b6;
+      background: rgba(0,0,0,0.6);
+      color: var(--accent-purple);
       padding: 1rem;
       border-radius: 12px;
-      font-family: 'Fira Code', monospace;
       font-size: 0.85rem;
-      max-width: 320px;
+      max-width: 280px;
       opacity: 0;
       animation: fadeInOut 6s ease-in-out forwards;
       white-space: pre-wrap;
     }
     body.theme-gold .typewriter-chat {
-      background: rgba(255, 255, 255, 0.2);
-      color: #f1c40f;
+      background: rgba(255,255,255,0.2);
+      color: var(--accent-gold);
     }
     @keyframes fadeInOut {
-      0% { opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { opacity: 0; }
+      0%,100% { opacity: 0; }
+      10%,90% { opacity: 1; }
     }
+
     .title {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      text-align: center;
+      font-size: 3rem; font-weight: 700;
+      margin-bottom: 0.5rem; text-align: center;
       animation: fadeIn 1s ease;
       z-index: 2;
     }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(10px)} to {opacity:1; transform:translateY(0)} }
     body.theme-purple .title {
       background: linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     body.theme-gold .title {
       background: linear-gradient(to right, #d4af37, #eacb84);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
+
     .slogan {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 1.5rem;
+      font-size: 1.1rem; font-weight: 500;
+      margin-bottom: 1.5rem; text-align: center; z-index:2;
       animation: fadeInSlideUp 1.2s ease-in-out, glowPulse 1.5s ease-in-out infinite alternate;
-      text-align: center;
-      z-index: 2;
     }
     @keyframes fadeInSlideUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+      0% { opacity:0; transform:translateY(20px) }
+      100% { opacity:1; transform:translateY(0) }
     }
     @keyframes glowPulse {
-      0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5); }
-      100% { text-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 60px rgba(255, 255, 255, 1); }
+      0%   { text-shadow: 0 0 10px rgba(255,255,255,0.7) }
+      100% { text-shadow: 0 0 30px rgba(255,255,255,1) }
     }
+
     .container {
-      max-width: 640px;
-      width: 100%;
-      background: rgba(255,255,255,0.06);
+      width: 100%; max-width: 720px;
+      background: rgba( 255,255,255,0.06 );
       border-radius: 16px;
       padding: 2rem;
       box-shadow: 0 0 16px rgba(0,0,0,0.5);
       z-index: 1;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin-bottom: 4rem;
     }
-    textarea {
+
+    /* Central hub: textarea or clarify inputs */
+    #promptText {
+      font-size: 1rem; margin-bottom: 0.5rem;
+    }
+    #ideaInput, .clarify-container input {
       width: 100%;
-      height: 120px;
-      font-size: 1rem;
       padding: 1rem;
-      background: #1a1a1a;
-      color: #f1c40f;
+      font-size: 1rem;
       border-radius: 10px;
-      resize: none;
-      transition: color 0.3s ease;
+      border: 1px solid #555;
+      background-image: var(--metallic-purple);
+      background-size: cover;
+      background-blend-mode: overlay;
+      color: #f1c40f;
+      margin-bottom: 1rem;
       font-family: 'Fira Code', monospace;
     }
-    body.theme-gold textarea {
-      background: #222;
+    body.theme-gold #ideaInput,
+    body.theme-gold .clarify-container input {
+      background-image: var(--metallic-gold);
       color: #9b59b6;
     }
-    pre {
-      background: #111;
-      color: #00ffaa;
-      padding: 1rem;
-      border-radius: 8px;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      font-size: 0.95rem;
-      font-family: 'Fira Code', monospace;
-    }
+
     button {
-      margin-top: 1rem;
-      padding: 0.75rem 2rem;
+      font-family: 'Fira Code', monospace;
+      padding: 0.75rem 1.5rem;
       font-size: 1rem;
       font-weight: bold;
-      font-family: 'Fira Code', monospace;
       background-image: var(--metallic-purple);
       color: #fff;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s ease, transform 0.2s ease;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      box-shadow: 0 0 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
     }
     body.theme-gold button {
       background-image: var(--metallic-gold);
       color: #1a1a1a;
     }
-    button:hover {
-      transform: scale(1.05);
-    }
+    button:hover { transform: scale(1.05); }
+
     #loader {
       display: none;
-      margin-top: 1rem;
+      margin: 1rem 0;
       text-align: center;
+      font-size: 1.1rem;
     }
+
+    /* Response output panels: translucent theme */
+    #responseArea pre {
+      background: rgba(155,89,182,0.2);
+      color: var(--text-light);
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+    body.theme-gold #responseArea pre {
+      background: rgba(241,196,15,0.2);
+      color: var(--text-dark);
+    }
+
+    /* Settings */
     #settingsBtn {
-      position: fixed;
-      bottom: 64px;
-      right: 16px;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      font-size: 1.2rem;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      cursor: pointer;
-      z-index: 2;
+      position: fixed; bottom: 64px; right: 16px;
+      background: rgba(0,0,0,0.6); color: #fff;
+      padding: 0.5rem; font-size:1.4rem;
+      border-radius: 6px; cursor: pointer; z-index:2;
     }
     #settingsPanel {
       display: none;
-      position: fixed;
-      bottom: 110px;
-      right: 16px;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 1rem;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 0.9rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      position: fixed; bottom: 110px; right: 16px;
+      background: rgba(0,0,0,0.7); color: #fff;
+      padding: 1rem; border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.5);
+      font-size:0.9rem; z-index:2;
     }
     #settingsPanel label {
-      display: block;
-      margin-bottom: 10px;
+      display:block; margin-bottom:0.75rem;
     }
-    #settingsPanel input {
-      margin-right: 10px;
-    }
+    #settingsPanel input { margin-right:0.5rem; }
   </style>
 </head>
 <body class="theme-purple">
+
   <div class="typewriter-wrapper" id="typewriterWrapper"></div>
   <div class="title">Foundrly</div>
   <div class="slogan">Your Cofounder Doesn’t Have to Be Human.</div>
+
   <div class="container">
-    <h2>Describe your AI business idea:</h2>
-    <textarea id="ideaInput" placeholder="e.g. An AI that writes Instagram captions for barbers..."></textarea><br>
-    <button onclick="submitIdea()">Build It</button>
+    <div id="promptText">Describe your AI business idea:</div>
+    <textarea id="ideaInput" placeholder="e.g. An AI that writes Instagram captions for barbers..."></textarea>
+    <div class="clarify-container" id="clarifySection" style="display:none"></div>
+    <button id="actionBtn" onclick="submitIdea()">Build It</button>
     <div id="loader">⏳ Generating...</div>
-    <div id="responseArea" style="margin-top: 2rem;"></div>
+    <div id="responseArea"></div>
   </div>
+
   <button id="settingsBtn" onclick="toggleSettings()">⚙️</button>
   <div id="settingsPanel">
-    <label>🌗 Theme: <input type="checkbox" id="themeToggle" onclick="toggleTheme()" /></label>
-    <label>🎞️ Background Animation: <input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()" /></label>
-    <label>🖋️ Typing Speed: <input type="checkbox" id="fastTypingToggle" onclick="toggleTypingSpeed()" /></label>
-    <label>✨ Reduce Glow Mode: <input type="checkbox" id="glowToggle" onclick="toggleGlow()" /></label>
+    <label>🌗 Theme: <input type="checkbox" id="themeToggle" onclick="toggleTheme()"></label>
+    <label>🎞️ Background Animation: <input type="checkbox" id="bgAnimToggle" onclick="toggleBackgroundAnimation()"></label>
+    <label>🖋️ Typing Speed: <input type="checkbox" id="fastTypingToggle" onclick="toggleTypingSpeed()"></label>
+    <label>✨ Reduce Glow: <input type="checkbox" id="glowToggle" onclick="toggleGlow()"></label>
   </div>
 
   <script>
@@ -229,127 +216,119 @@
       "Generate DM templates for influencer collabs.",
       "From idea to MVP, instantly."
     ];
-
-    let followUpQuestions = [];
     let typingSpeed = 'normal';
+    let refineQuestions = [];
+    let originalIdea = '';
 
     function spawnChatBubble(text) {
       const bubble = document.createElement("div");
       bubble.className = "typewriter-chat";
-      const leftSide = Math.random() < 0.5;
-      const leftOffset = Math.random() * 20 + 5;
-      const rightOffset = Math.random() * 20 + 5;
-      if (leftSide) {
-        bubble.style.left = `${leftOffset}%`;
-      } else {
-        bubble.style.left = `${80 + rightOffset}%`;
-      }
-      bubble.style.top = `${Math.random() * 90}%`;
+      bubble.style.left = `${Math.random()*70+5}%`;
+      bubble.style.top  = `${Math.random()*90}%`;
       document.getElementById("typewriterWrapper").appendChild(bubble);
-      let index = 0;
-      const typingInterval = setInterval(() => {
-        if (index < text.length) {
-          bubble.textContent += text[index];
-          index++;
-        } else {
-          clearInterval(typingInterval);
-          bubble.textContent += ".";
-          setTimeout(() => bubble.remove(), 1000);
-        }
-      }, typingSpeed === 'fast' ? 30 : 45);
+      let i=0;
+      const interval = setInterval(() => {
+        if (i<text.length) bubble.textContent+=text[i++];
+        else { clearInterval(interval); bubble.textContent+="."; setTimeout(()=>bubble.remove(),1000); }
+      }, typingSpeed==='fast'?30:45);
     }
+    setInterval(() => spawnChatBubble(phrases[Math.floor(Math.random()*phrases.length)]), 2500);
 
     async function submitIdea() {
-      const idea = document.getElementById("ideaInput").value;
-      const responseArea = document.getElementById("responseArea");
-      const loader = document.getElementById("loader");
-      loader.style.display = "block";
-      responseArea.innerHTML = "";
+      originalIdea = document.getElementById("ideaInput").value.trim();
+      if (!originalIdea) return;
 
-      try {
-        const refineRes = await fetch("https://foundrly-backend-1.onrender.com/api/refine-idea", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ idea })
+      document.getElementById("loader").style.display = 'block';
+      document.getElementById("responseArea").innerHTML = '';
+      document.getElementById("clarifySection").style.display = 'none';
+      document.getElementById("actionBtn").style.display = 'none';
+
+      const res = await fetch("https://foundrly-backend-1.onrender.com/api/refine-idea", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ idea: originalIdea })
+      });
+      const data = await res.json();
+      document.getElementById("loader").style.display = 'none';
+
+      if (data.status==="clarify") {
+        refineQuestions = data.questions;
+        const sec = document.getElementById("clarifySection");
+        sec.innerHTML = '<h3>Let’s clarify a few things:</h3>';
+        refineQuestions.forEach((q,i)=>{
+          const inp = document.createElement("input");
+          inp.placeholder = q; inp.id = `ans_${i}`;
+          sec.appendChild(inp);
         });
-
-        const refineData = await refineRes.json();
-
-        if (refineData.status === "clarify") {
-          responseArea.innerHTML = "<h3>Let’s clarify a few things:</h3><ul>" +
-            refineData.questions.map(q => `<li>${q}</li>`).join("") + "</ul>";
-        } else if (refineData.status === "ready") {
-          const genRes = await fetch("https://foundrly-backend-1.onrender.com/api/generate-code", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              idea,
-              target_user: "creators",
-              platform: "web app",
-              features: ["text generation", "download"]
-            })
-          });
-
-          const genData = await genRes.json();
-          responseArea.innerHTML = ` 
-            <h3>Tool Summary:</h3><pre>${genData.spec}</pre>
-            <h3>Generated Code:</h3><pre>${genData.code}</pre>
-            <h3>Setup Instructions:</h3><pre>${genData.instructions}</pre>
-          `;
-        } else {
-          responseArea.innerHTML = "Unexpected response.";
-        }
-      } catch (err) {
-        console.error(err);
-        responseArea.innerHTML = "Something went wrong.";
-      } finally {
-        loader.style.display = "none";
+        const btn = document.createElement("button");
+        btn.textContent="Submit Answers";
+        btn.onclick = submitAnswers;
+        sec.appendChild(btn);
+        sec.style.display = 'block';
       }
+      else if (data.status==="ready") {
+        generateCode(originalIdea);
+      } else {
+        document.getElementById("responseArea").textContent = "Unexpected response.";
+      }
+    }
+
+    async function submitAnswers() {
+      const answers = refineQuestions.map((_,i)=>document.getElementById(`ans_${i}`).value.trim());
+      const refined = originalIdea + ". " + answers.join(" ");
+      document.getElementById("clarifySection").style.display = 'none';
+      generateCode(refined);
+    }
+
+    async function generateCode(idea) {
+      document.getElementById("loader").style.display = 'block';
+      const res = await fetch("https://foundrly-backend-1.onrender.com/api/generate-code", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+          idea, target_user: "creators",
+          platform: "web app", features:["text generation","download"]
+        })
+      });
+      const data = await res.json();
+      document.getElementById("loader").style.display = 'none';
+      document.getElementById("responseArea").innerHTML = `
+        <h3>Tool Summary:</h3><pre>${data.spec}</pre>
+        <h3>Generated Code:</h3><pre>${data.code}</pre>
+        <h3>Setup Instructions:</h3><pre>${data.instructions}</pre>`;
+      // bring back hub
+      document.getElementById("actionBtn").style.display = 'block';
+      document.getElementById("promptText").textContent = "Describe your AI business idea:";
+      document.getElementById("ideaInput").style.display = 'block';
     }
 
     function toggleSettings() {
-      const panel = document.getElementById("settingsPanel");
-      panel.style.display = panel.style.display === "none" || panel.style.display === "" ? "block" : "none";
+      const p = document.getElementById("settingsPanel");
+      p.style.display = p.style.display==='block'? 'none':'block';
     }
-
     function toggleTheme() {
       document.body.classList.toggle("theme-purple");
       document.body.classList.toggle("theme-gold");
-      localStorage.setItem("theme", document.body.classList.contains("theme-purple") ? "purple" : "gold");
+      localStorage.setItem("theme", document.body.classList.contains("theme-purple")?"purple":"gold");
     }
-
     function toggleBackgroundAnimation() {
-      const wrapper = document.getElementById("typewriterWrapper");
-      wrapper.style.display = wrapper.style.display === "none" ? "block" : "none";
-      localStorage.setItem("bgAnim", wrapper.style.display === "none" ? "off" : "on");
+      const w = document.getElementById("typewriterWrapper");
+      w.style.display = w.style.display==='none'? 'block':'none';
+      localStorage.setItem("bgAnim", w.style.display);
     }
-
     function toggleTypingSpeed() {
-      typingSpeed = typingSpeed === 'normal' ? 'fast' : 'normal';
+      typingSpeed = typingSpeed==='normal'? 'fast':'normal';
       localStorage.setItem("typingSpeed", typingSpeed);
     }
-
     function toggleGlow() {
-      const slogan = document.querySelector(".slogan");
-      slogan.classList.toggle("no-glow");
-      localStorage.setItem("glow", slogan.classList.contains("no-glow") ? "off" : "on");
+      document.querySelector(".slogan").classList.toggle("no-glow");
+      localStorage.setItem("glow", document.querySelector(".slogan").classList.contains("no-glow")?"off":"on");
     }
 
     window.onload = () => {
-      // Load saved settings from localStorage
-      if (localStorage.getItem("theme") === "gold") {
-        toggleTheme();
-      }
-      if (localStorage.getItem("bgAnim") === "off") {
-        toggleBackgroundAnimation();
-      }
-      if (localStorage.getItem("typingSpeed") === "fast") {
-        toggleTypingSpeed();
-      }
-      if (localStorage.getItem("glow") === "off") {
-        toggleGlow();
-      }
-    }
+      if(localStorage.getItem("theme")==="gold") toggleTheme();
+      if(localStorage.getItem("bgAnim")==="none") toggleBackgroundAnimation();
+      if(localStorage.getItem("typingSpeed")==="fast") toggleTypingSpeed();
+      if(localStorage.getItem("glow")==="off") toggleGlow();
+    };
   </script>
 </body>
 </html>
